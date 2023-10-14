@@ -1,7 +1,8 @@
-# ignore json files
-.json
-
-# ignore ipynb, py files without first_map_database.ipynb
-.ipynb
 .py
+.ipynb
+.json
+__pycache__/
+.ipynb_checkpoins/
+
 !first_map_database.ipynb
+!.df_to_bigquery.ipynb
