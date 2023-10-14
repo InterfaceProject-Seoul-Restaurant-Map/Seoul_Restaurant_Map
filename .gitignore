@@ -1,0 +1,7 @@
+# ignore json files
+.json
+
+# ignore ipynb, py files without first_map_database.ipynb
+.ipynb
+.py
+!first_map_database.ipynb

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "summer-pattern-398307",
+  "private_key_id": "1aac4438edab4e81b66de94b38be156afb03bf11",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC3zWBJNXVU4BTo\n4njJx2dEq0OZ8JSDH3Qz6HhdwRXXa/9MnqA2BPpmd0LO3F4qi08atoMZf+3hJcCL\npACK2AL3/RIa2SDaMX9iRNc2HLcZ+SSYnwIjcJYMh1J6kYz6+G6hYOOpT4R+pn/G\nwAG/wAVX/G7Oj3T8YPbJdZAgmwt7847Qv1zWDiCIDHK2AfUVOozNtDSBGjRTPCIt\nEOs7CSHyX+IJsOYr+PlT6s0rMvXrAihOvDkw0P1Af3nbyMNe/IbbNxXwxoYA93b6\nQbc1RuerRGHkNPl01aXKYLsStiTKavIRbG+UIKzqDYP5ZXUVdb002uQqXNmeWR01\nomwMmd/tAgMBAAECggEAAt8yofIz4x+dNAZV3NFAy9HhPIaFy4aySh1XxB9AOB13\n37qaxj1NrEwwvwqybfe/RKuVYNCe5uWwHH5zg7fcVAOgRMsfuEkNtHte4XmRYtaB\nu+DAJ82aipeSsleT3FgFYoAhDoQvjcsMNA7L+DMH4lgPYyraqRbaxEsR9XB2vXkJ\n+N283gnVAtDC8M/lopr+6FvOokt/1esa7BXPU9BWRD67D4aYFZzlKYkUvx4pKiMR\ncB8i1NVYfjzmxCRa/73kVEPt76rO0OU6QuepaqPidGEuqkblbdF+hhVF30IRL775\nLN0B+mzJOz2Ayl8i73FAV65URiHoj0q6luQYPdCAAQKBgQDjnyUg5wQwTFXYkzDi\nupn+ExrGD4aElKYuwi4r+5jZ3am6pq+0rCreTWikWKHeX3C3U0Tp8ddPoXsFC7zo\nPZYh8L7m7n4AW7kSqWapoupL3kuOyPikAxUzGYqJXe7YVA94ZiEQtEYgUnBtB9AL\nXn9ecEBCbjmARzpdy86Q7C19uQKBgQDOt6zM/V0tEkUpvht1ungt4+uu6wsnY9m9\nnrPk14XC73ZT0pdKco9pavKWxdcFeIKML1KSQO5Yuas0jUQSGy1gYGeiHBjmuDua\nSF/4/wlVvBAQPdhoRAVcy+M0ksswAlE+tb+pBCmile4U+ZoWEepsiO+knpetCkxH\nAigSpjzt1QKBgQC1gwITk8UmUqkeVHnmQ5FrJ4bxLA5ECVnf7Z7uGesQyQ+BNUzm\nEWj57takP72M26TBvBg3SlA9QvMb2flhZUMke5twAfzegkY6WHXyjmSx7WlpSl/k\nQkUUg6iS1CITxiy0ARUbAfbt7W+Tsmg3uLpu76p+jvExlxs3Er/9lyjLmQKBgHY2\np4UapvwtZIv4gW+T0UI9AvymwVwnR8+eQDXv4jiWBE7vMUGLveOFG3GJdetU/SL5\ntPiaVTM8CmIlHvZTwGFLADi+ZKccWElkdi3IeygiQfVnyKfnrkFg/2+DOtsbmCaK\nfS5EiSLHJr2r96gDWtHyhUjYwNhd+TzqSMxRcKp5AoGBALInhKX1/BTz1CRySwLT\nUehhmUP1soaFSqPPodcP2TtIAhnH3B3z8gzSmHo0P8cCpdgn8P7AMxSE9gRTjUb3\nChZGQtWGbICWNdNjeUUCRp29gfkUGu4v2zX/9FkRfi1JUVW2IK3tFxF9bSt3TwHZ\nXi1qY4vpGvyv2N7f+IraDUrC\n-----END PRIVATE KEY-----\n",
+  "client_email": "mz-map-project@summer-pattern-398307.iam.gserviceaccount.com",
+  "client_id": "104441782634080962635",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mz-map-project%40summer-pattern-398307.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
