@@ -11,14 +11,7 @@ credentials = service_account.Credentials.from_service_account_file(
 # 빅쿼리 클라이언트 객체 생성
 client = bigquery.Client(credentials = credentials, project = credentials.project_id)
 
-def input_table(table_name,input_df,is_replace):
-    project_name = 'summer-pattern-398307'
-    dataset_name = 'MZ_map_table'
-    destination_table = dataset_name + '.' + table_name
-    
-    if(is_replace):
-        input_df.to_gbq(destination_table,project_name,if_exists='replace',credentials=credentials)
-        print('replace ok')
-    else:
-        input_df.to_gbq(destination_table,project_name,if_exists='append',credentials=credentials)
-        print('append ok')
+# BigQuery에서 테이블 가져오기
+def get_table(query):
+    df = client.query(query).to_dataframe()
+    return df
