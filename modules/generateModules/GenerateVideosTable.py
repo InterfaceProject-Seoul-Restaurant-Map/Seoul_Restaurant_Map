@@ -140,63 +140,69 @@ def videos_df_input(input_list):
 def each_extract(playlist_short_items,channel_name,input_list):
     if(channel_name=='성시경 SUNG SI KYUNG'):
         for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             pattern = r'\[(.*?)\]'
             matches = re.findall(pattern, dic['snippet']['description']) #괄호안에 있는 상호명 추출
             matches = ''.join(matches) #to string          
             if(matches):
-                video_id = dic['snippet']['resourceId']['videoId']
                 restaurant_list_input(matches,video_id)
                 videos_df_input(video_info_input(input_list, video_id))
                 
     elif(channel_name=='쏘야미'):
-        for dic in playlist_short_items:            
+        for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']            
             pattern = r'#(\w+)'
             matches = re.findall(pattern, dic['snippet']['title']) #괄호안에 있는 상호명 추출
             matches = ''.join(matches) #to string
             if(matches != 'shorts' and matches != ''):
-                video_id = dic['snippet']['resourceId']['videoId']
                 restaurant_list_input(matches,video_id)
                 videos_df_input(video_info_input(input_list, video_id))
     
     elif(channel_name=='지뉼랭가이드'):
          for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             pattern = r'• (.+)'
             matches = re.findall(pattern, dic['snippet']['description'])
             matches = [match for match in matches]
+            desicion_videos_input=0
             for match in matches:
                 match = ''.join(match) #to string
                 if(match):
-                    video_id = dic['snippet']['resourceId']['videoId']
+                    desicion_videos_input=1
                     restaurant_list_input(match,video_id)
-                    videos_df_input(video_info_input(input_list, video_id))
+            if(desicion_videos_input==1):
+                videos_df_input(video_info_input(input_list, video_id))
                         
     elif(channel_name=='떡볶퀸 Tteokbokqueen'):
          for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             pattern = r'\[(.*?)\]'
             matches = re.findall(pattern, dic['snippet']['description']) #괄호안에 있는 상호명 추출
             matches = [match for match in matches]
+            desicion_videos_input=0
             for match in matches:
-                video_id = dic['snippet']['resourceId']['videoId']
+                desicion_videos_input=1
                 restaurant_list_input(match,video_id)
+            if(desicion_videos_input==1):
                 videos_df_input(video_info_input(input_list, video_id))
     
     elif(channel_name=='정육왕 MeatCreator'):
          for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             pattern = r'\"(.*?)\"'
             matches = re.findall(pattern, dic['snippet']['description']) #괄호안에 있는 상호명 추출
             matches = ''.join(matches) #to string            
             if(matches):
-                video_id = dic['snippet']['resourceId']['videoId']
                 restaurant_list_input(matches,video_id)
                 videos_df_input(video_info_input(input_list, video_id))
                 
     elif(channel_name=='김사원세끼'):
         for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             pattern = re.compile(r'\[식당정보\]\n(.+)')
             matches = re.search(pattern, dic['snippet']['description'])
             text=dic['snippet']['description']
             if(matches):
-                video_id = dic['snippet']['resourceId']['videoId']
                 matched_text = matches.group(1)  # Get the part of the match after '\n'
                 
                 if(matched_text[0]>='0' and matched_text[0]<='9'):
@@ -221,70 +227,75 @@ def each_extract(playlist_short_items,channel_name,input_list):
         
     elif(channel_name=='회사랑RawFishEater'):
         for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             pattern = r"- 식당명 : (.+)"
             matches = re.findall(pattern, dic['snippet']['description'])
             matches = ''.join(matches) #to string 
             if(matches):
-                video_id = dic['snippet']['resourceId']['videoId']
+
                 restaurant_list_input(matches,video_id)
                 videos_df_input(video_info_input(input_list, video_id))
     
     elif(channel_name=='김짬뽕'):
         for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             pattern = r"상호 : (.+)"
             matches = re.findall(pattern, dic['snippet']['description'])
             matches = ''.join(matches) #to string 
             if(matches):
-                video_id = dic['snippet']['resourceId']['videoId']
+
                 restaurant_list_input(matches,video_id)
                 videos_df_input(video_info_input(input_list, video_id))
     
     elif(channel_name=='조이한끼'):
         for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             matches = re.findall(r'I\s(.*?)\sI', dic['snippet']['description'])
             matches = ''.join(matches) #to string 
             if(matches):
-                video_id = dic['snippet']['resourceId']['videoId']
+
                 restaurant_list_input(matches,video_id)
                 videos_df_input(video_info_input(input_list, video_id))
                 
     elif(channel_name=='잡식공룡'):
         for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             pattern = r"📍(.+)"
             matches = re.findall(pattern, dic['snippet']['description'])
             matches = ''.join(matches).strip() #to string 
             if(matches):
-                video_id = dic['snippet']['resourceId']['videoId']
+
                 restaurant_list_input(matches,video_id)
                 videos_df_input(video_info_input(input_list, video_id))
          
     elif(channel_name=='섬마을훈태TV'):
         for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             matches = re.findall(r'🔍정보🔍\s*\n\s*상호:(.*?)\s*\n', dic['snippet']['description'])
             matches = ''.join(matches).strip() #to string 
             if(matches):
                 matches=matches.strip()
-                video_id = dic['snippet']['resourceId']['videoId']
+
                 restaurant_list_input(matches,video_id)
                 videos_df_input(video_info_input(input_list, video_id))
     
     elif(channel_name=='맛있겠다 Yummy'):
         for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             matches = re.findall(r'#(\S+)', dic['snippet']['description'])
             matches=list(set(matches))
             exclude_substring=['맛있겠다','yummy']
             matches=[s for s in matches if all(excl not in s for excl in exclude_substring)]
             for match in matches:
                 match=match.strip()
-                video_id = dic['snippet']['resourceId']['videoId']
                 restaurant_list_input(match,video_id)
-                videos_df_input(video_info_input(input_list, video_id))
+            videos_df_input(video_info_input(input_list, video_id))
     
     elif(channel_name =='먹갱_Mukgang'):
         for dic in playlist_short_items:
+            video_id = dic['snippet']['resourceId']['videoId']
             matches = re.search(r'오늘의 식당 : \[([^\]]+)\]', dic['snippet']['description'])
             if(matches):
                 matches = matches.group(1)
-                video_id = dic['snippet']['resourceId']['videoId']
                 restaurant_list_input(matches,video_id)
                 videos_df_input(video_info_input(input_list, video_id))
