@@ -1,9 +1,0 @@
-.py
-.ipynb
-.json
-__pycache__/
-.ipynb_checkpoins/
-
-!first_map_database.ipynb
-!.df_to_bigquery.ipynb
-README.md
