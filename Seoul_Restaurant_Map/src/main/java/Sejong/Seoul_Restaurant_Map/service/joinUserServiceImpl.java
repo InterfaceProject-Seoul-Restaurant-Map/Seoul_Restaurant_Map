@@ -1,43 +1,48 @@
 package Sejong.Seoul_Restaurant_Map.service;
 
-import Sejong.Seoul_Restaurant_Map.domain.Member;
-import Sejong.Seoul_Restaurant_Map.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
+import Sejong.Seoul_Restaurant_Map.domain.User;
+import Sejong.Seoul_Restaurant_Map.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 
-@RequiredArgsConstructor
+@Service
 public class joinUserServiceImpl implements joinUserService{
+    @Autowired
+    private UserRepository userRepository;
 
-    private final MemberRepository memberRepository;
+
     @Override
     public boolean isValidId(String id) {
-        Optional<Member> find =  memberRepository.findById(id);
+        Optional<User> find = userRepository.findById(id);
         if (find.isEmpty())
             return true;
         return false;
     }
     @Override
     public boolean isValidEmail(String email) {
-        if (!memberRepository.existsByUser_email(email))
+        if (!userRepository.isValidEmail(email))
             return true;
         return false;
     }
 
     @Override
     public boolean isValidNickname(String nickname) {
-        if (!memberRepository.existsByUser_name(nickname))
+        if (!userRepository.isValidName(nickname))
             return true;
         return false;
     }
     @Override
     public void joinNewUser(String id, String name, String email, String password) {
-        Member member = new Member();
-        member.setUser_id(id);
-        member.setUser_name(name);
-        member.setUser_email(email);
-        member.setUser_password(password);
-        memberRepository.save(member);
+
+        User user = new User();
+        user.setUser_id(id);
+        user.setUser_name(name);
+        user.setUser_email(email);
+        user.setUser_password(password);
+        userRepository.save(user);
     }
+
 }

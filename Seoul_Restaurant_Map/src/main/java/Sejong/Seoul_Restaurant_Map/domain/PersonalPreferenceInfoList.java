@@ -15,7 +15,7 @@ public class PersonalPreferenceInfoList {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Member member;
+    private User user;
 
     @OneToMany(mappedBy = "info")
     private Set<PersonalPreferenceList> restaurant_set;
@@ -31,12 +31,12 @@ public class PersonalPreferenceInfoList {
         this.user_list_id = user_list_id;
     }
 
-    public Member getMember() {
-        return member;
+    public User getUser() {
+        return user;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Set<PersonalPreferenceList> getRestaurant_set() {

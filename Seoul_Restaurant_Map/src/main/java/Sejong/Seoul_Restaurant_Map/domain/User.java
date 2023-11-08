@@ -10,13 +10,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name="users")
-public class Member {
+public class User {
     @Id
     private String user_id;
 
     private String user_name, user_email, user_password;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "user")
     private Set<PersonalPreferenceInfoList> infoList;
 
     public String getUser_id() {
