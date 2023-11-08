@@ -1,0 +1,15 @@
+.active {
+    color: #FF7A00;
+    /* 원하는 스타일을 여기에 추가 */
+    background-color: white;
+    transform: scale(1.01);
+    transition-duration: 0.5s;
+    text-decoration: none;
+}
+
+.inactive {
+    color: #BBBBBB;
+    background-color: white;
+    transform: scale(1);
+    text-decoration: none;
+}

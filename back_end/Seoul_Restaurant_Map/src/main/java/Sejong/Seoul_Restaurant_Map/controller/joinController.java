@@ -1,28 +1,32 @@
 package Sejong.Seoul_Restaurant_Map.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import Sejong.Seoul_Restaurant_Map.domain.CreateFormUser;
+import org.hibernate.mapping.Join;
+import org.springframework.web.bind.annotation.*;
 import Sejong.Seoul_Restaurant_Map.service.joinUserService;
 import Sejong.Seoul_Restaurant_Map.service.joinUserServiceImpl;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
 public class joinController {
-
     private joinUserService joinService = new joinUserServiceImpl();
-
-    @PostMapping(value = "/join")
-    public boolean isValidId(@RequestParam("userId")String userId){
-        return joinService.isValidId(userId);
+    @GetMapping(value = "/join/validId")
+    public boolean isValidId(@RequestBody String input_id){
+        if (!joinService.isValidId(input_id))
+            return false;
+        return true;
     }
-    @PostMapping(value = "/join3")
-    public boolean isValidName(@RequestParam("userName")String userName){
-        return joinService.isValidNickname(userName);
+    @GetMapping(value = "/join/validEmail")
+    public boolean isValidEmail(@RequestBody String input_email)
+    {
+        if (!joinService.isValidEmail(input_email))
+            return false;
+        return true;
     }
-    @PostMapping(value = "/join2")
-    public boolean isValidEmail(@RequestParam("userEmail")String userEmail){
-        return joinService.isValidEmail(userEmail);
+    @PostMapping(value = "/join/joinNewUser")
+    public void joinNewUser(@RequestBody CreateFormUser createFormUser)
+    {
+        joinService.joinNewUser(createFormUser.getId(), "No Nickname", createFormUser.getEmail(), createFormUser.getPassword());
     }
 
 }
