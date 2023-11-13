@@ -14,8 +14,11 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     private List<Restaurant_category> categoryList;
     private String address;
-    private double location_x, location_y;
-    private String place_url;
+    @Column(name = "location_x")
+    private double locationX;
+    @Column(name = "location_y")
+    private double locationY;
+    private String placeUrl;
 
     public String getRestaurant_name() {
         return restaurant_name;
@@ -41,27 +44,27 @@ public class Restaurant {
         this.address = address;
     }
 
-    public double getLocation_x() {
-        return location_x;
+    public double getLocationX() {
+        return locationX;
     }
 
-    public void setLocation_x(double location_x) {
-        this.location_x = location_x;
+    public void setLocationX(double location_x) {
+        this.locationX = location_x;
     }
 
-    public double getLocation_y() {
-        return location_y;
+    public double getLocationY() {
+        return locationY;
     }
 
-    public void setLocation_y(double location_y) {
-        this.location_y = location_y;
+    public void setLocationY(double location_y) {
+        this.locationY = location_y;
     }
 
-    public String getPlace_url() {
-        return place_url;
+    public String getPlaceUrl() {
+        return placeUrl;
     }
 
-    public void setPlace_url(String place_url) {
-        this.place_url = place_url;
+    public void setPlaceUrl(String place_url) {
+        this.placeUrl = place_url;
     }
 }

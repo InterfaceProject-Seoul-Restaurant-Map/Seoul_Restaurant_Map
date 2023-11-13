@@ -9,8 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
-    @Query("select u from User u where u.user_email = :user_email")
-    boolean isValidEmail(@Param("user_email") String user_email);
-    @Query("select u from User u where u.user_name = :user_name")
-    boolean isValidName(@Param("user_name") String user_name);
+    boolean existsByUserEmail(String email);
+
+    boolean existsByUserName(String name);
 }

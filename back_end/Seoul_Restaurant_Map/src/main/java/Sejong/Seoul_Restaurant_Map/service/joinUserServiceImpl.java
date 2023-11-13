@@ -3,7 +3,6 @@ package Sejong.Seoul_Restaurant_Map.service;
 import Sejong.Seoul_Restaurant_Map.domain.User;
 import Sejong.Seoul_Restaurant_Map.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,13 +23,13 @@ public class joinUserServiceImpl{
     }
 
     public boolean isValidEmail(String email) {
-        if (!userRepository.isValidEmail(email))
+        if (!userRepository.existsByUserEmail(email))
             return true;
         return false;
     }
 
     public boolean isValidNickname(String nickname) {
-        if (!userRepository.isValidName(nickname))
+        if (!userRepository.existsByUserName(nickname))
             return true;
         return false;
     }
@@ -39,9 +38,9 @@ public class joinUserServiceImpl{
 
         User user = new User();
         user.setUser_id(id);
-        user.setUser_name(name);
-        user.setUser_email(email);
-        user.setUser_password(password);
+        user.setUserName(name);
+        user.setUserEmail(email);
+        user.setUserPassword(password);
         userRepository.save(user);
     }
 

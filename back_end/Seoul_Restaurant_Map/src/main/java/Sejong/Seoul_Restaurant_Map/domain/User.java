@@ -14,7 +14,7 @@ public class User {
     @Id
     private String user_id;
 
-    private String user_name, user_email, user_password;
+    private String userName, userEmail, userPassword;
 
     @OneToMany(mappedBy = "user")
     private Set<PersonalPreferenceInfoList> infoList;
@@ -27,28 +27,28 @@ public class User {
         this.user_id = user_id;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setUserName(String user_name) {
+        this.userName = user_name;
     }
 
-    public String getUser_email() {
-        return user_email;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUser_email(String user_email) {
-        this.user_email = user_email;
+    public void setUserEmail(String user_email) {
+        this.userEmail = user_email;
     }
 
-    public String getUser_password() {
-        return user_password;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setUser_password(String user_password) {
-        this.user_password = user_password;
+    public void setUserPassword(String user_password) {
+        this.userPassword = user_password;
     }
 
     public Set<PersonalPreferenceInfoList> getInfoList() {
