@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "restaurants_category")
+@Table(name = "restaurant_category")
 public class Restaurant_category {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long category_link_id;

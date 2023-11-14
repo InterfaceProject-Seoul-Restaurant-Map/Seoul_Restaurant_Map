@@ -3,15 +3,17 @@ package Sejong.Seoul_Restaurant_Map.domain;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
 @Entity
 @Table(name = "restaurants")
 public class Restaurant {
-    @Id
+    @Id@Column(name = "restaurant_name")
     private String restaurant_name;
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
     private List<Restaurant_category> categoryList;
     private String address;
     @Column(name = "location_x")
