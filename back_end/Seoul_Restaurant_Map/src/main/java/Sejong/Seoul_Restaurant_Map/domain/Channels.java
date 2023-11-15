@@ -1,12 +1,9 @@
 package Sejong.Seoul_Restaurant_Map.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
@@ -15,8 +12,11 @@ public class Channels {
     @Id
     private String channel_id;
     @OneToMany(mappedBy = "channels")
-    private Set<Playlists> playlists;
-    private String channel_name, channel_thumb;
+    private List<Playlists> playlists;
+    @Column(name = "channel_name")
+    private String channelName;
+    @Column(name = "channel_thumb")
+    private String channelThumb;
     private int subscriber_count, views;
 
     public String getChannel_id() {
@@ -27,28 +27,28 @@ public class Channels {
         this.channel_id = channel_id;
     }
 
-    public Set<Playlists> getPlaylists() {
+    public List<Playlists> getPlaylists() {
         return playlists;
     }
 
-    public void setPlaylists(Set<Playlists> playlists) {
+    public void setPlaylists(List<Playlists> playlists) {
         this.playlists = playlists;
     }
 
-    public String getChannel_name() {
-        return channel_name;
+    public String getChannelName() {
+        return channelName;
     }
 
-    public void setChannel_name(String channel_name) {
-        this.channel_name = channel_name;
+    public void setChannelName(String channel_name) {
+        this.channelName = channel_name;
     }
 
-    public String getChannel_thumb() {
-        return channel_thumb;
+    public String getChannelThumb() {
+        return channelThumb;
     }
 
-    public void setChannel_thumb(String channel_thumb) {
-        this.channel_thumb = channel_thumb;
+    public void setChannelThumb(String channel_thumb) {
+        this.channelThumb = channel_thumb;
     }
 
     public int getSubscriber_count() {

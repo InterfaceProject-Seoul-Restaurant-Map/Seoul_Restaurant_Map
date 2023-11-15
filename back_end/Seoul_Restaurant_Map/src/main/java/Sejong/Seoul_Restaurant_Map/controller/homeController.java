@@ -24,5 +24,10 @@ public class homeController {
         return mapService.searchByRange(x_start, x_end, y_start, y_end);
     }
 
+    @GetMapping(value = "home/advancedSearch")
+    public List<restaurantResponseDto> advancedSearch(@RequestParam List<String> channel, @RequestParam List<String> tag, @RequestParam int views)
+    {
+        return mapService.searchByAdvanced(channel, tag, views);
+    }
 
 }

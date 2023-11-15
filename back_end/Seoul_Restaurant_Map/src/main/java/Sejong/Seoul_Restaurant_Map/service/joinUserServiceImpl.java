@@ -14,7 +14,6 @@ public class joinUserServiceImpl{
 
     private final UserRepository userRepository;
 
-
     public boolean isValidId(String id) {
         Optional<User> find = userRepository.findById(id);
         if (find.isEmpty())

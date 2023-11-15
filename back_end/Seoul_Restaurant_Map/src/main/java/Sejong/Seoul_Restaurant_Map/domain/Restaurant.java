@@ -6,21 +6,49 @@ import lombok.NoArgsConstructor;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @Entity
 @Table(name = "restaurants")
 public class Restaurant {
+
     @Id@Column(name = "restaurant_name")
     private String restaurant_name;
+
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
     private List<Restaurant_category> categoryList;
+
+
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
+    private List<Restaurant_video> videoList;
+
     private String address;
     @Column(name = "location_x")
     private double locationX;
     @Column(name = "location_y")
     private double locationY;
     private String placeUrl;
+
+    @Override
+    public boolean equals(Object o){
+        if (o instanceof Restaurant) {
+            return restaurant_name.equals(((Restaurant) o).restaurant_name);
+        }
+        return false;
+    }
+    @Override
+    public int hashCode() {
+        return restaurant_name.hashCode();
+    }
+
+    public List<Restaurant_video> getVideoList() {
+        return videoList;
+    }
+
+    public void setVideoList(List<Restaurant_video> videoList) {
+        this.videoList = videoList;
+    }
 
     public String getRestaurant_name() {
         return restaurant_name;

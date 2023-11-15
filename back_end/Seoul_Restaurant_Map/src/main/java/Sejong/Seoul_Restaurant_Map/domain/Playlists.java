@@ -17,6 +17,7 @@ public class Playlists {
     @ManyToOne
     @JoinColumn(name = "channel_id")
     private Channels channels;
+
     private String playlist_name;
     private Boolean is_video;
 

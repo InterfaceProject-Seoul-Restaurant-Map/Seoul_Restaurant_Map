@@ -17,7 +17,6 @@ public class restaurantResponseDto {
     private String placeUrl;
 
     public restaurantResponseDto(Restaurant restaurant) {
-        System.out.println("check : " + restaurant.getCategoryList().size());
         this.restaurant_name = restaurant.getRestaurant_name();
         this.address = restaurant.getAddress();
         this.locationX = restaurant.getLocationX();

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.List;
+
 @NoArgsConstructor
 @Entity
 @Table(name = "videos")
@@ -19,6 +21,18 @@ public class Video {
     private String video_title;
     private int video_views;
     private Date date;
+
+
+    @OneToMany(mappedBy = "video")
+    private List<Restaurant_video> restaurantVideoList;
+
+    public List<Restaurant_video> getRestaurantVideoList() {
+        return restaurantVideoList;
+    }
+
+    public void setRestaurantVideoList(List<Restaurant_video> restaurantVideoList) {
+        this.restaurantVideoList = restaurantVideoList;
+    }
 
     public String getVideo_id() {
         return video_id;
