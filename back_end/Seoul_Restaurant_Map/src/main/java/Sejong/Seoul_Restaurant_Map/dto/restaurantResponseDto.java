@@ -1,28 +1,48 @@
 package Sejong.Seoul_Restaurant_Map.dto;
 
 import Sejong.Seoul_Restaurant_Map.domain.Restaurant;
+import Sejong.Seoul_Restaurant_Map.domain.Restaurant_video;
+import Sejong.Seoul_Restaurant_Map.domain.Video;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-
 
 public class restaurantResponseDto {
 
     private String restaurant_name;
     private List<String> categoryList;
     private String address;
-    private double locationX;
-    private double locationY;
+    private Latlng latlng;
     private String placeUrl;
+    private List<videoDto> videoData;
 
     public restaurantResponseDto(Restaurant restaurant) {
         this.restaurant_name = restaurant.getRestaurant_name();
         this.address = restaurant.getAddress();
-        this.locationX = restaurant.getLocationX();
-        this.locationY = restaurant.getLocationY();
+        this.latlng = new Latlng(restaurant.getLocationX(), restaurant.getLocationY());
         this.placeUrl = restaurant.getPlaceUrl();
         this.categoryList = restaurant.getCategoryList().stream().map(r -> r.getCategory().getCategory()).collect(Collectors.toList());
+        List<Restaurant_video> connectedRestaurant = restaurant.getVideoList();
+        List<Video> connectedVideos = connectedRestaurant.stream()
+                .map(o -> o.getVideo()).collect(Collectors.toList());
+        this.videoData = connectedVideos.stream().map(o -> new videoDto(o)).collect(Collectors.toList());
+        this.videoData = this.videoData.stream().distinct().collect(Collectors.toList());
+    }
+
+    public List<videoDto> getVideoData() {
+        return videoData;
+    }
+
+    public void setVideoData(List<videoDto> videoData) {
+        this.videoData = videoData;
+    }
+
+    public Latlng getLatlng() {
+        return latlng;
+    }
+
+    public void setLatlng(Latlng latlng) {
+        this.latlng = latlng;
     }
 
     public String getRestaurant_name() {
@@ -47,22 +67,6 @@ public class restaurantResponseDto {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public double getLocationX() {
-        return locationX;
-    }
-
-    public void setLocationX(double locationX) {
-        this.locationX = locationX;
-    }
-
-    public double getLocationY() {
-        return locationY;
-    }
-
-    public void setLocationY(double locationY) {
-        this.locationY = locationY;
     }
 
     public String getPlaceUrl() {

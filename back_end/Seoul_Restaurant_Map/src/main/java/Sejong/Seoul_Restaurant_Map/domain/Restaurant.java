@@ -16,11 +16,11 @@ public class Restaurant {
     @Id@Column(name = "restaurant_name")
     private String restaurant_name;
 
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<Restaurant_category> categoryList;
 
 
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<Restaurant_video> videoList;
 
     private String address;

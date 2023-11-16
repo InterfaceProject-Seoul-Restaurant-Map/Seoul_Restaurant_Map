@@ -12,7 +12,7 @@ public class Category_list {
     @Id
     private String category;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Restaurant_category> restaurantCategoryList;
 
     public List<Restaurant_category> getRestaurantCategoryList() {

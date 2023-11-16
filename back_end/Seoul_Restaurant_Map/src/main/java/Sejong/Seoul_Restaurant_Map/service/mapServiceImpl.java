@@ -61,8 +61,6 @@ public class mapServiceImpl {
                 .stream().distinct().collect(Collectors.toList());
 
 
-
-
             List<Channels> channelsList = channelsRepository.findByChannelNameIn(channels);
             List<List<Playlists>> playlists = channelsList.stream()
                     .map(o -> o.getPlaylists()).collect(Collectors.toList());
