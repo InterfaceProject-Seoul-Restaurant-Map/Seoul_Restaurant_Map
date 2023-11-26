@@ -1,11 +1,11 @@
 package Sejong.Seoul_Restaurant_Map.dto;
 
-public class Latlng {
+public class latlngDto {
 
     private double lat;
     private double lng;
 
-    public Latlng(double lat, double lng) {
+    public latlngDto(double lng, double lat) {
         this.lat = lat;
         this.lng = lng;
     }

@@ -12,14 +12,14 @@ public class restaurantResponseDto {
     private String restaurant_name;
     private List<String> categoryList;
     private String address;
-    private Latlng latlng;
+    private latlngDto latlng;
     private String placeUrl;
     private List<videoDto> videoData;
 
     public restaurantResponseDto(Restaurant restaurant) {
         this.restaurant_name = restaurant.getRestaurant_name();
         this.address = restaurant.getAddress();
-        this.latlng = new Latlng(restaurant.getLocationX(), restaurant.getLocationY());
+        this.latlng = new latlngDto(restaurant.getLocationX(), restaurant.getLocationY());
         this.placeUrl = restaurant.getPlaceUrl();
         this.categoryList = restaurant.getCategoryList().stream().map(r -> r.getCategory().getCategory()).collect(Collectors.toList());
         List<Restaurant_video> connectedRestaurant = restaurant.getVideoList();
@@ -37,11 +37,11 @@ public class restaurantResponseDto {
         this.videoData = videoData;
     }
 
-    public Latlng getLatlng() {
+    public latlngDto getLatlng() {
         return latlng;
     }
 
-    public void setLatlng(Latlng latlng) {
+    public void setLatlng(latlngDto latlng) {
         this.latlng = latlng;
     }
 

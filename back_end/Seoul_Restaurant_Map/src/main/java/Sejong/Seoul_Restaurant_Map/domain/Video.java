@@ -19,7 +19,8 @@ public class Video {
     private String youtube_url;
     private String thumb_img;
     private String video_title;
-    private int video_views;
+    @Column(name = "video_views")
+    private int videoViews;
     private Date date;
 
 
@@ -74,12 +75,12 @@ public class Video {
         this.video_title = video_title;
     }
 
-    public int getVideo_views() {
-        return video_views;
+    public int getVideoViews() {
+        return videoViews;
     }
 
-    public void setVideo_views(int video_views) {
-        this.video_views = video_views;
+    public void setVideoViews(int video_views) {
+        this.videoViews = video_views;
     }
 
     public Date getDate() {

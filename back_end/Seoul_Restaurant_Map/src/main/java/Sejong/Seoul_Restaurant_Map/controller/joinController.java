@@ -27,9 +27,10 @@ public class joinController {
         return true;
     }
     @PostMapping(value = "/join/joinNewUser")
-    public void joinNewUser(@RequestBody CreateFormUser createFormUser)
+    public boolean joinNewUser(@RequestBody HashMap<String, String> map)
     {
-        joinService.joinNewUser(createFormUser.getId(), "No Nickname", createFormUser.getEmail(), createFormUser.getPassword());
+        joinService.joinNewUser(map.get("id"), "No Nickname", map.get("email"), map.get("password"));
+        return true;
     }
 
 }
