@@ -3,12 +3,12 @@ package Sejong.Seoul_Restaurant_Map.domain;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
 @Table(name="user_list_features")
-public class PersonalPreferenceInfoList {
+public class UserRestaurantListInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_list_id;
@@ -18,7 +18,7 @@ public class PersonalPreferenceInfoList {
     private User user;
 
     @OneToMany(mappedBy = "info")
-    private Set<PersonalPreferenceList> restaurant_set;
+    private List<UserRestaurantList> restaurantList;
 
     private String list_nickname, list_object;
     private int list_size, list_color;
@@ -39,12 +39,12 @@ public class PersonalPreferenceInfoList {
         this.user = user;
     }
 
-    public Set<PersonalPreferenceList> getRestaurant_set() {
-        return restaurant_set;
+    public List<UserRestaurantList> getRestaurantList() {
+        return restaurantList;
     }
 
-    public void setRestaurant_set(Set<PersonalPreferenceList> restaurant_set) {
-        this.restaurant_set = restaurant_set;
+    public void setRestaurantList(List<UserRestaurantList> restaurant_set) {
+        this.restaurantList = restaurant_set;
     }
 
     public String getList_nickname() {

@@ -4,21 +4,19 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @NoArgsConstructor
 @Entity
 @Table(name="user_lists")
-public class PersonalPreferenceList {
+public class UserRestaurantList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_list_link_id;
 
     @ManyToOne
     @JoinColumn(name = "user_list_id")
-    private PersonalPreferenceInfoList info;
+    private UserRestaurantListInfo info;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_name")
@@ -39,11 +37,11 @@ public class PersonalPreferenceList {
         this.user_list_link_id = user_list_link_id;
     }
 
-    public PersonalPreferenceInfoList getInfo() {
+    public UserRestaurantListInfo getInfo() {
         return info;
     }
 
-    public void setInfo(PersonalPreferenceInfoList info) {
+    public void setInfo(UserRestaurantListInfo info) {
         this.info = info;
     }
 

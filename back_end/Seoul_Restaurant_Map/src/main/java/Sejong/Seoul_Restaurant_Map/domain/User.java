@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -17,7 +18,7 @@ public class User {
     private String userName, userEmail, userPassword;
 
     @OneToMany(mappedBy = "user")
-    private Set<PersonalPreferenceInfoList> infoList;
+    private List<UserRestaurantListInfo> infoList;
 
     public String getUser_id() {
         return user_id;
@@ -51,11 +52,11 @@ public class User {
         this.userPassword = user_password;
     }
 
-    public Set<PersonalPreferenceInfoList> getInfoList() {
+    public List<UserRestaurantListInfo> getInfoList() {
         return infoList;
     }
 
-    public void setInfoList(Set<PersonalPreferenceInfoList> infoList) {
+    public void setInfoList(List<UserRestaurantListInfo> infoList) {
         this.infoList = infoList;
     }
 }
