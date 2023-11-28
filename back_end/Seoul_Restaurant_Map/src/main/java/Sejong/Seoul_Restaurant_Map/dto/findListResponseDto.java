@@ -8,7 +8,7 @@ public class findListResponseDto {
     private Long listId;
 
     public findListResponseDto(UserRestaurantListInfo userList) {
-        this.listName = userList.getList_nickname();
+        this.listName = userList.getListNickname();
         this.listId = userList.getUser_list_id();
     }
 

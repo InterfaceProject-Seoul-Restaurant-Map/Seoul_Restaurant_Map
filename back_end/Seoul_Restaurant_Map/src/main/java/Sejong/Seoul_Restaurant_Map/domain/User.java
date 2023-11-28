@@ -17,7 +17,7 @@ public class User {
 
     private String userName, userEmail, userPassword;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserRestaurantListInfo> infoList;
 
     public String getUser_id() {

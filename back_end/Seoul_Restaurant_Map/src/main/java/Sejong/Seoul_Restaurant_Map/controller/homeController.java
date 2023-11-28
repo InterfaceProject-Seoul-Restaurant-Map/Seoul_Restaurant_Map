@@ -44,10 +44,19 @@ public class homeController {
         }
     }
 
-    @PostMapping(value = "home/addRestaurantToList")
-    public boolean addRestauarantToList(@RequestBody HashMap<String, String> map)
+    @PostMapping(value = "home/addRestaurantToList", produces = "application/json; charset=utf8")
+    public int addRestauarantToList(@RequestBody HashMap<String, Object> map, HttpServletRequest request)
     {
-
+        //request.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("loginUser") != null){
+            long listId = (long)(int)map.get("listId");
+            String restaruantName = (String)map.get("restaurantName");
+            return listService.addRestaurantToList(restaruantName, listId);
+        }
+        else {
+            return 4; // 세션 유효하지 않음.
+        }
     }
 
 }

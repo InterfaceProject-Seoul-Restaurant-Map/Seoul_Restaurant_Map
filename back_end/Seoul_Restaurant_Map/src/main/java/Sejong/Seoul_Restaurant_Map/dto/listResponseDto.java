@@ -13,7 +13,7 @@ public class listResponseDto {
 
 
     public listResponseDto(UserRestaurantListInfo userList) {
-        this.listName = userList.getList_nickname();
+        this.listName = userList.getListNickname();
         List<UserRestaurantList> restaurantLists = userList.getRestaurantList();
         this.restaurantInfo =  restaurantLists.stream().map(o -> new listRestaurantDto(o.getRestaurant())).collect(Collectors.toList());
     }

@@ -24,11 +24,6 @@ public class UserRestaurantList {
 
     private String restaurant_description;
 
-    private int rank;
-
-    @DateTimeFormat
-    private Date upload_in_list_date;
-
     public Long getUser_list_link_id() {
         return user_list_link_id;
     }
@@ -61,19 +56,4 @@ public class UserRestaurantList {
         this.restaurant_description = restaurant_description;
     }
 
-    public int getRank() {
-        return rank;
-    }
-
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
-
-    public Date getUpload_in_list_date() {
-        return upload_in_list_date;
-    }
-
-    public void setUpload_in_list_date(Date upload_in_list_date) {
-        this.upload_in_list_date = upload_in_list_date;
-    }
 }

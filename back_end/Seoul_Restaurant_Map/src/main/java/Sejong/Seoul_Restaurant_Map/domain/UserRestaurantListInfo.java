@@ -2,6 +2,7 @@ package Sejong.Seoul_Restaurant_Map.domain;
 
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -17,10 +18,12 @@ public class UserRestaurantListInfo {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "info")
+    @OneToMany(mappedBy = "info", cascade = CascadeType.ALL)
     private List<UserRestaurantList> restaurantList;
 
-    private String list_nickname, list_object;
+    @Column(name = "list_nickname")@NonNull
+    private String listNickname;
+    private String list_object;
     private int list_size, list_color;
 
     public Long getUser_list_id() {
@@ -47,12 +50,12 @@ public class UserRestaurantListInfo {
         this.restaurantList = restaurant_set;
     }
 
-    public String getList_nickname() {
-        return list_nickname;
+    public String getListNickname() {
+        return listNickname;
     }
 
-    public void setList_nickname(String list_nickname) {
-        this.list_nickname = list_nickname;
+    public void setListNickname(String listNickname) {
+        this.listNickname = listNickname;
     }
 
     public String getList_object() {

@@ -7,6 +7,7 @@ import com.mysql.cj.log.Log;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,5 +30,17 @@ public class loginController {
             session.setAttribute("loginUser", user);
          }
          return check;
+    }
+
+    @GetMapping(value = "/checkLoginStatus")
+    public boolean checkLoginStatus(HttpServletRequest request)
+    {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("loginUser") != null){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
