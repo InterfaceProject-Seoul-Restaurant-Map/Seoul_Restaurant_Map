@@ -32,6 +32,19 @@ public class loginController {
          return check;
     }
 
+    @PostMapping(value = "/logout")
+    public int logoutUser(HttpServletRequest request)
+    {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("loginUser") != null){
+            session.invalidate();
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
+
     @GetMapping(value = "/checkLoginStatus")
     public boolean checkLoginStatus(HttpServletRequest request)
     {

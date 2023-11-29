@@ -6,6 +6,7 @@ import Sejong.Seoul_Restaurant_Map.domain.UserRestaurantList;
 import Sejong.Seoul_Restaurant_Map.domain.UserRestaurantListInfo;
 import Sejong.Seoul_Restaurant_Map.dto.findListResponseDto;
 import Sejong.Seoul_Restaurant_Map.dto.listResponseDto;
+import Sejong.Seoul_Restaurant_Map.dto.restaurantResponseDto;
 import Sejong.Seoul_Restaurant_Map.repository.RestaurantRepository;
 import Sejong.Seoul_Restaurant_Map.repository.UserRepository;
 import Sejong.Seoul_Restaurant_Map.repository.UserRestaurantListInfoRepository;
@@ -231,5 +232,17 @@ public class listServiceImpl {
             return 0;
 
         return 2;
+    }
+
+    public restaurantResponseDto returnListElement(String restaurantName)
+    {
+        Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantName);
+        if (restaurantOptional.isPresent())
+        {
+            Restaurant restaurant = restaurantOptional.get();
+            return new restaurantResponseDto(restaurant);
+        }
+        else
+            return null;
     }
 }

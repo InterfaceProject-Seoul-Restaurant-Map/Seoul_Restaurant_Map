@@ -1,6 +1,7 @@
 package Sejong.Seoul_Restaurant_Map.controller;
 
 import Sejong.Seoul_Restaurant_Map.dto.listResponseDto;
+import Sejong.Seoul_Restaurant_Map.dto.restaurantResponseDto;
 import Sejong.Seoul_Restaurant_Map.service.listServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -97,6 +98,17 @@ public class listController {
         }
         else {
             return 3;
+        }
+    }
+
+    @GetMapping(value = "/list/returnListElement")
+    public restaurantResponseDto returnListElement(@RequestParam String restaurantName, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("loginUser") != null){
+            return listService.returnListElement(restaurantName);
+        }
+        else {
+            return null;
         }
     }
 

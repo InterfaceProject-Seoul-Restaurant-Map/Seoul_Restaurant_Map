@@ -20,6 +20,31 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserRestaurantListInfo> infoList;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<RequestBoard> requestBoards;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Board> boards;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ChannelRequestBoard> channelRequestBoards;
+
+    public List<ChannelRequestBoard> getChannelRequestBoards() {
+        return channelRequestBoards;
+    }
+
+    public void setChannelRequestBoards(List<ChannelRequestBoard> channelRequestBoards) {
+        this.channelRequestBoards = channelRequestBoards;
+    }
+
+    public List<Board> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(List<Board> boards) {
+        this.boards = boards;
+    }
+
     public String getUser_id() {
         return user_id;
     }
@@ -58,5 +83,13 @@ public class User {
 
     public void setInfoList(List<UserRestaurantListInfo> infoList) {
         this.infoList = infoList;
+    }
+
+    public List<RequestBoard> getRequestBoards() {
+        return requestBoards;
+    }
+
+    public void setRequestBoards(List<RequestBoard> requestBoards) {
+        this.requestBoards = requestBoards;
     }
 }
