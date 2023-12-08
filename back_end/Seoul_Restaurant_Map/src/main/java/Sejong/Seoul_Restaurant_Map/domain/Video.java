@@ -16,6 +16,7 @@ public class Video {
     @ManyToOne
     @JoinColumn(name = "playlist_id")
     private Playlists playlist;
+    @Column(name = "video_url")
     private String youtube_url;
     private String thumb_img;
     private String video_title;

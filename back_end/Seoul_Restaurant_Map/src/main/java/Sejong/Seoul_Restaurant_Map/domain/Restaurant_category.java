@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class Restaurant_category {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long category_link_id;
+
     @ManyToOne
     @JoinColumn(name = "restaurant_name")
     private Restaurant restaurant;
@@ -16,7 +17,6 @@ public class Restaurant_category {
     @ManyToOne
     @JoinColumn(name = "category")
     private Category_list category;
-
     public Long getCategory_link_id() {
         return category_link_id;
     }
