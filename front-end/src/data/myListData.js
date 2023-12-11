@@ -45,11 +45,27 @@ export const myListData = [
         listName: '디저트 맛집',
         restaurantInfo: [
             {
-                restaurantName: '피자스쿨',
+                restaurantName: '진저베어',
                 restaurantTag: ['피자', '양식', '파스타']
             },
             {
-                restaurantName: '도미노피자',
+                restaurantName: '테디뵈르하우스',
+                restaurantTag: ['피자', '양식', '피클']
+            },
+            {
+                restaurantName: '소하염전',
+                restaurantTag: ['피자', '양식', '파스타']
+            },
+            {
+                restaurantName: '테디스오븐',
+                restaurantTag: ['피자', '양식', '피클']
+            },
+            {
+                restaurantName: '어퍼앤언더',
+                restaurantTag: ['피자', '양식', '파스타']
+            },
+            {
+                restaurantName: '푸쉬커피 을지',
                 restaurantTag: ['피자', '양식', '피클']
             },
         ]

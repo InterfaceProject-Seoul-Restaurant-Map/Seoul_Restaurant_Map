@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import React from 'react';
 
 const OrangeButton = styled.button`
-    background-color: #FFA500; /* 주황색 */
+    background-color: #FF7A00; /* 주황색 */
     color: white;
+    font-weight: 700;
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
@@ -17,11 +18,11 @@ const OrangeButton = styled.button`
     }
 `;
 
-const OrangeBtn = ({ onClick }) => {
+const OrangeBtn = ({ onClick, text, style }) => {
     return (
-        <div>
-            <OrangeButton onClick={onClick}>맛집 재검색</OrangeButton>
-        </div>
+        <span>
+            <OrangeButton onClick={onClick} style={style}>{text}</OrangeButton>
+        </span>
     );
 };
 

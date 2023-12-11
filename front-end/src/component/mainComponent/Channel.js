@@ -2,7 +2,7 @@ import styled from "styled-components";
 import ChannelTags from "./HandleChannels";
 
 const StyleChannelWrapper = styled.div`
-    height: 20vh;
+    min-height: 20vh;
     border: black solid 1px;
     display: inline-block;
     overflow-y: scroll;
@@ -23,10 +23,13 @@ const StyleChannelWrapper = styled.div`
 `;
 
 
-const ChannelWrapper = () => {
+const ChannelWrapper = ({ onChannelTagsChange }) => {
+    const handleTagSelectionChange = (selectedTags) => {
+        onChannelTagsChange(selectedTags);
+    };
     return (
         <StyleChannelWrapper>
-            <ChannelTags />
+            <ChannelTags onTagSelectionChange={handleTagSelectionChange} />
         </StyleChannelWrapper>
     )
 };

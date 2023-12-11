@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import RequestContent from "../component/content/RequestContent";
 
 const Request = () => {
     return (
-        <div>request page</div>
+        <RequestContent />
     )
 };
 

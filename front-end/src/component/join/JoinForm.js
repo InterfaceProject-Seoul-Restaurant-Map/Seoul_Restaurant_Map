@@ -75,6 +75,7 @@ const JoinForm = () => {
 
     const [isIdAvailable, setIsIdAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
     const [isEmailAvailable, setIsEmailAvailable] = useState(false); // 이메일 사용 가능한지 아닌지
+    const [isPwdAVailable, setIsPwdAvailable] = useState(false);
 
     const config = {
         headers: {
@@ -119,9 +120,8 @@ const JoinForm = () => {
         }
         try {
             const emailData = { email: email };
-            const response = await axios.post('http://35.216.106.118:8080/join/validEmail', emailData, config);
-
-            if (response) {
+            const response = await axios.post('/join/validEmail', emailData, config);
+            if (response.data === true) {
                 setEmailError('사용 가능한 이메일입니다.');
                 setIsEmailAvailable(true);
                 return true;
@@ -133,7 +133,6 @@ const JoinForm = () => {
 
         } catch (error) {
             alert('서버 오류입니다. 관리자에게 문의하세요.');
-            console.error(error);
             return false;
         }
     };
@@ -156,9 +155,8 @@ const JoinForm = () => {
                 id: id,
             }
 
-            const response = await axios.post('http://35.216.106.118:8080/join/validId', idData, config);
-
-            if (response) {
+            const response = await axios.post('/join/validId', idData, config);
+            if (response.data === true) {
                 setIdError('사용 가능한 아이디입니다.');
                 setIsIdAvailable(true);
                 return true;
@@ -169,7 +167,6 @@ const JoinForm = () => {
             }
         } catch (error) {
             alert('서버 오류입니다. 관리자에게 문의하세요.');
-            console.error(error);
             return false;
         }
     }
@@ -191,15 +188,17 @@ const JoinForm = () => {
     const isConfirmPasswordSame = (password, confirmPassword) => {
         if (confirmPassword !== password) {
             setConfirmPasswordError('비밀번호가 일치하지 않습니다.');
+            setIsPwdAvailable(false);
             return false;
         } else {
             setConfirmPasswordError('');
+            setIsPwdAvailable(true);
             return true;
         }
     };
 
     const finalValidation = () => {
-        if (isIdAvailable && isEmailAvailable)
+        if (isIdAvailable && isEmailAvailable && isPwdAVailable)
             return true;
         return false;
     };
@@ -207,16 +206,15 @@ const JoinForm = () => {
     const onSubmitHandler = async (e) => {
         e.preventDefault();
         const joinData = {
-            email: email,
-            password: password,
-            id: id,
+            "email": email,
+            "password": password,
+            "id": id,
         }
         if (finalValidation() === true) {
             await axios
-                .post("http://35.216.106.118:8080/join/joinNewUser", joinData, config)
+                .post("/join/joinNewUser", joinData, config)
                 .then((response) => {
-                    console.log("response", response);
-                    if (response === 1) {
+                    if (response.data === true) {
                         alert("회원가입에 성공하셨습니다.");
                         navigate("/login");
                     }

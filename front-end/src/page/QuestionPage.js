@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import QuestionContent from "../component/content/QuestionContent";
 
 const Question = () => {
     return (
-        <div>question page</div>
+        <QuestionContent />
     )
 };
 

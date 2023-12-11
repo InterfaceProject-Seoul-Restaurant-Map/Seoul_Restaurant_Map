@@ -1,8 +1,8 @@
-import { FoodDatas } from "../data/FoodType";
-import React, { useState } from 'react';
-import SelectedTag from "./common/SelectedTag";
+import { FoodDatas } from "../../data/FoodType";
+import React, { useState, useEffect } from 'react';
+import SelectedTag from "../common/SelectedTag";
 
-const FoodTags = () => {
+const FoodTags = ({ onSelectedTagsChange, }) => {
     const [selectedTags, setSelectedTags] = useState({});
 
     const handleToggleSelection = (tagName) => {
@@ -12,8 +12,10 @@ const FoodTags = () => {
         }));
     };
 
-    const SelectedFoodsTagArray = Object.keys(selectedTags).filter(tagName => selectedTags[tagName])
-    console.log(SelectedFoodsTagArray);
+    useEffect(() => {
+        const SelectedFoodsTagArray = Object.keys(selectedTags).filter(tagName => selectedTags[tagName]);
+        onSelectedTagsChange(SelectedFoodsTagArray);
+    }, [selectedTags]);
 
     return (
         <div>

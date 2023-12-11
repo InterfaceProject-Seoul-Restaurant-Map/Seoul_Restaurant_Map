@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import FoodTags from "./HandleFoods";
+import { useEffect, useState } from "react";
 
 const StyleFoodWrapper = styled.div`
-    height: 20vh;
+    min-height: 20vh;
     border: black solid 1px;
     display: inline-block;
     overflow-y: scroll;
@@ -22,10 +23,13 @@ const StyleFoodWrapper = styled.div`
     }
 `;
 
-const FoodWrapper = () => {
+const FoodWrapper = ({ onFoodTagsChange }) => {
+    const handleSelectedTagsChange = (tags) => {
+        onFoodTagsChange(tags);
+    };
     return (
         <StyleFoodWrapper>
-            <FoodTags />
+            <FoodTags onSelectedTagsChange={handleSelectedTagsChange} />
         </StyleFoodWrapper>
     )
 };

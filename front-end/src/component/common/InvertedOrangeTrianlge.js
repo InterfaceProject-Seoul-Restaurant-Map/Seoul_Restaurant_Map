@@ -7,12 +7,13 @@ const StyleInvertedOrangeTriangle = styled.span`
   border-right: 10px solid transparent;
   border-bottom: 18px solid #FF7A00; 
   margin-right: 1vw;
+  cursor: pointer;
 `;
 
 const InvertedOrangeTriangle = () => {
-    return (
-        <StyleInvertedOrangeTriangle></StyleInvertedOrangeTriangle>
-    );
+  return (
+    <StyleInvertedOrangeTriangle></StyleInvertedOrangeTriangle>
+  );
 };
 
 export default InvertedOrangeTriangle;

@@ -5,18 +5,19 @@ import FriendList from '../listComponent/FriendList';
 
 const SidebarWrapper = styled.div`
     min-width: 400px;
-    width: 30%;
+    width: 25%;
     background-color: white;
     display: flex;
     overflow-y: scroll;
+    overflow-x: hidden;
     flex-direction: column;
     padding: 20px 40px 40px 40px;
+
     &::-webkit-scrollbar {
     width: 12px;
     }
     &::-webkit-scrollbar-thumb {
         background-color: black;
-        height: auto;
     }
     &::-webkit-scrollbar-track {
         background-color: white;

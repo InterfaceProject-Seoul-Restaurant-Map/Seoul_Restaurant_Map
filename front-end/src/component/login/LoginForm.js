@@ -3,6 +3,7 @@ import StyleInput from "../common/Input"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useMarkers } from "../util/MyContext";
 
 const StyleLoginForm = styled.form`
     display: flex;
@@ -40,6 +41,15 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const [id, setId] = useState("");
     const [idError, setIdError] = useState("");
+    const { isLogin, setIsLogin } = useMarkers();
+
+    const config = {
+        withCredentials: true,
+        headers: {
+            'Content-Type': 'application/json', // 예시로 Content-Type 헤더를 추가했습니다.
+        },
+        withCredentials: true,
+    };
 
     const onChangeIdHandler = (e) => {
         const idValue = e.target.value;
@@ -55,38 +65,36 @@ const LoginForm = () => {
         } else if (!idRegex.test(id)) {
             setIdError('아이디는 5~10자의 영소문자, 숫자만 입력 가능합니다.');
             return false;
+        } else {
+            setIdError('');
+            return true;
         }
     }
 
     //로그인 제출했을시 함수
-    const onSubmit = async (event) => {
+    const onSubmitHandler = async (event) => {
         event.preventDefault();
-        const [email, password] = event.target;
-        let body = { email: email.value, password: password.value };
+        const [id, password] = event.target;
+        let body = { id: id.value, password: password.value };
         await axios
-            .post("https://api.colorfulworld.site/api/login", body)
+            .post("/login", body, config)
             .then((response) => {
-                if (response.status === 200) {
-                    axios.defaults.headers.common[
-                        "access_token"
-                    ] = `${response.headers.access_token}`;
-                    console.log(response);
-                    localStorage.setItem("atk", response.headers.access_token);
-                    localStorage.setItem("rtk", response.headers.refresh_token);
-                    localStorage.setItem("index", response.headers.intensity);
-                    localStorage.setItem("loginState", true);
-                    alert("로그인 성공! 환영합니다.");
+                if (response.data === 'ID_ERROR') {
+                    alert("일치하는 아이디가 없습니다.");
+                } else if (response.data === 'PASSWORD_ERROR') {
+                    alert("일치하는 패스워드가 없습니다.");
+                } else {
+                    sessionStorage.clear();
+                    sessionStorage.setItem("userId", id.value);
+                    setIsLogin(true);
+                    alert("로그인 성공! 환영합니다");
                     navigate("/");
-                } else if (response.response.data.code === "LOGIN-001") {
-                    alert("일치하는 회원이 없습니다. 먼저 회원가입을 진행해주세요!");
-                } else if (response.response.data.code === "LOGIN-002") {
-                    alert("비밀번호가 일치하지 않습니다.");
                 }
             })
             .catch((error) => console.log(error));
     };
     return (
-        <StyleLoginForm>
+        <StyleLoginForm onSubmit={onSubmitHandler}>
             <div>
                 <StyleInput
                     label="아이디"

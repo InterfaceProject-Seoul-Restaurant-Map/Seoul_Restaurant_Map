@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 
 const StyledInput = styled.input`
@@ -19,12 +19,15 @@ const StyledInput = styled.input`
         }
 `;
 
-const ViewBar = () => {
+const ViewBar = ({ onViewChange }) => {
     const [value, setValue] = useState(10000);
 
     const handleChange = (event) => {
         setValue(event.target.value);
     };
+    useEffect(() => {
+        onViewChange(value);
+    }, [value])
 
     return (
         <div>
@@ -36,7 +39,7 @@ const ViewBar = () => {
                 value={value}
                 onChange={handleChange}
             />
-            <p>현재 조회수: {value >= 1000000 ? `${value}+` : value}</p>
+            <p>현재 조회수: {value >= 1000000 ? `${value / 10000}만+` : `${value / 10000} 만`}</p>
         </div>
     );
 };
