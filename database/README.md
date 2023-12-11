@@ -1,3 +1,4 @@
+```
 📦database
  ┣ 📂airflowDags
  ┃ ┗ 📜youtube_parsing_input_sql_restaurants_videos.py
@@ -51,3 +52,4 @@
  ┃ ┗ 📜main.py
  ┣ 📜.gitignore
  ┗ 📜requirements.txt
+ ```
