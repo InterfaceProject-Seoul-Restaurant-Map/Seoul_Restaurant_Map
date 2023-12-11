@@ -1,11 +1,11 @@
-import re
+import os
+
 import pandas as pd
-import numpy as np
 import requests
 
 #kakao_map
 #######################################
-my_map_restapi_key = 'ef692e63b23382e5f866e76b99b38b40'
+my_map_restapi_key = os.environ.get("KAKAO_RESTAPI_KEY")
 
 #restaurants테이블 생성
 #####################
@@ -25,7 +25,10 @@ def place_to_info(place,my_RESP_API_key):
     headers = {"Authorization": "KakaoAK "+my_RESP_API_key}
     try:
         places = requests.get(url, params=params, headers=headers).json()['documents'][0]
-
+        
+        if(int(places['x']) ==0):
+            return;
+        
         input_list=[place,
                     places['address_name'],
                     float(places['x']),
@@ -33,8 +36,7 @@ def place_to_info(place,my_RESP_API_key):
                     places['place_url']]
         restaurant_category_df_input_list = [place,places['category_name']]
     except:
-        input_list=[place,None,None,None,None]
-        restaurant_category_df_input_list = [place,None]
+        print("error")
         
     global restaurants_df
     restaurants_df.loc[len(restaurants_df)]=input_list

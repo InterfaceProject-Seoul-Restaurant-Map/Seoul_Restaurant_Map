@@ -1,17 +1,13 @@
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from oauth2client.tools import argparser
+import os
 
 import pandas as pd
-import requests
-import json
-import re
+from googleapiclient.discovery import build
 
 #youtube
 #######################################
-my_youtube_1 ='AIzaSyDH8Pq7ddkmMJhA0kni5kBEe1UPBy31H70'
-my_youtube_2 ='AIzaSyAPLm-070e6WYKq2YN2WIqIzbqqrQkU3N4'
+my_youtube_1 =os.environ.get('YOUTUBE_API_KEY')
 my_youtube_api=my_youtube_1
+
 
 DEVELOPER_KEY = my_youtube_api
 YOUTUBE_API_SERVICE_NAME = "youtube"

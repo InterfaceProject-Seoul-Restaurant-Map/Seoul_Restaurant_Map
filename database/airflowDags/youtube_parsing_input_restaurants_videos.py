@@ -1,12 +1,19 @@
-import os
-import re
+from datetime import datetime, timedelta
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.operators.latest_only_operator import LatestOnlyOperator
+import pytz
+
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from oauth2client.tools import argparser
 
 import pandas as pd
-from googleapiclient.discovery import build
-
+import re
 #youtube
 #######################################
-my_youtube_1 =os.environ.get('YOUTUBE_API_KEY')
+my_youtube_1 ='AIzaSyDH8Pq7ddkmMJhA0kni5kBEe1UPBy31H70'
+my_youtube_2 ='AIzaSyAPLm-070e6WYKq2YN2WIqIzbqqrQkU3N4'
 my_youtube_api=my_youtube_1
 
 DEVELOPER_KEY = my_youtube_api
@@ -16,96 +23,68 @@ FREEBASE_SEARCH_URL = "https://www.googleapis.com/freebase/v1/search?%s"
 
 youtube=build(YOUTUBE_API_SERVICE_NAME,YOUTUBE_API_VERSION,developerKey=DEVELOPER_KEY)
 
+videos_col_list=['video_id','playlist_id','video_url','thumb_img','video_title','video_views','date']
+videos_df=pd.DataFrame(columns=videos_col_list)
+
 restaurant_in_video_list=[]
 video_id_restaurant_list=[]
 
-videos_col_list=['video_id','playlist_id','video_url','thumb_img','video_title','video_views','date']
-videos_df=pd.DataFrame([],columns=videos_col_list)
+#videos
+########################################################################################################
 
-def return_videos_df(channel_name,playlist_id,is_video_int,is_test):
+def generate_and_return_videos_df(playlist_id,last_execution_time):
     videos_col_list=['video_id','playlist_id','video_url','thumb_img','video_title','video_views','date']
     clear_videos_df(videos_col_list)
-    making_youtube_table(channel_name,playlist_id,is_video_int,is_test)
+    generate_videos_df(playlist_id,last_execution_time,is_test=0)
     videos_df['date'] = pd.to_datetime(videos_df['date'])
     videos_df['video_views'].astype(int)
     return videos_df
+
+def generate_videos_df(playlist_id,last_execution_time,is_test=0):
+    
+    videos_col_list=['video_id','playlist_id','video_url','thumb_img','video_title','video_views','date']
+    input_list=[None for k in range(len(videos_col_list))]
+    
+    uploads_playlist_id = playlist_id
+
+    playlist_items = []  # 초기화
+    
+    playlistitems = youtube.playlistItems().list(
+        part='snippet', 
+        playlistId=uploads_playlist_id, 
+        maxResults=1
+        )
+
+    tmp_playlist_items=(playlistitems.execute())['items']
+    upload_time = tmp_playlist_items[0]['snippet']['publishedAt']
+    channel_name = tmp_playlist_items[0]['snippet']['channelTitle']
+    
+    if(last_execution_time<upload_time):
+        playlist_items=(playlistitems.execute())['items']
+        
+    if(is_test==0 or last_execution_time<upload_time):
+        while playlistitems:
+            playlistitems = youtube.playlistItems().list_next(
+                playlistitems,
+                playlistitems.execute()
+            )
+
+            if not playlistitems:
+                break
+            
+            tmp_playlist_items=(playlistitems.execute())['items']
+            upload_time = tmp_playlist_items[0]['snippet']['publishedAt']
+
+            if(last_execution_time>=upload_time):
+                break
+            playlist_items+=(playlistitems.execute())['items']
+    
+    each_extract(playlist_items,channel_name,input_list)
 
 def clear_videos_df(videos_col_list):
     global videos_df  # 함수 내에서 전역 변수 videos_df를 수정하기 위해 global 키워드 사용
     videos_df = pd.DataFrame(columns=videos_col_list)  # 빈 DataFrame으로 초기화
 
-#하나의 플레이리스트 당 video 추출
-def making_youtube_table(channel_name,playlist_id,is_video_int,is_test):
-    videos_col_list=['video_id','playlist_id','video_url','thumb_img','video_title','video_views','date']
-            
-    input_list=[None for k in range(len(videos_col_list))] #video테이블에 넣을 빈리스트 생성
-    instance_cnt=0;
-    #재생목록이 있는 경우
-    if(is_video_int == 1):
-        input_list[1]=playlist_id
-        
-        if(is_test==1):
-            video = youtube.playlistItems().list(
-                playlistId = playlist_id,
-                part = 'snippet',
-                maxResults = 2 
-                )
-            playlist_short_items=(video.execute())['items']
-            instance_cnt+=2
-        else:
-            video = youtube.playlistItems().list(
-                playlistId = playlist_id,
-                part = 'snippet',
-                maxResults = 50 
-                )
-            playlist_short_items=(video.execute())['items']
-            instance_cnt+=50
-            while video:
-                video = youtube.playlistItems().list_next(
-                    video,
-                    video.execute()
-                )
-                if not video:
-                    break
-                playlist_short_items+=(video.execute())['items']
-        
-        print("instance_cnt : ", instance_cnt)
-        
-        #각각의 영상별 description or title을 통해 상호명 추출
-        #여기부터는 각 채널의 description이 상이하므로 하드코딩으로 상호명을 추출
-        each_extract(playlist_short_items,channel_name,input_list)
-        
-    
-    #재생목록이 없는 경우(쇼츠)
-    else: #(is_video_int == 0)
-        uploads_playlist_id = playlist_id
-        
-        input_list[1]=uploads_playlist_id
-        
-        playlistitems = youtube.playlistItems().list(
-            part='snippet', 
-            playlistId=uploads_playlist_id, 
-            maxResults=2
-            )
-        instance_cnt+=2
-        playlist_short_items=(playlistitems.execute())['items']
-        if(is_test==0):
-            while playlistitems:
-                playlistitems = youtube.playlistItems().list_next(
-                    playlistitems,
-                    playlistitems.execute()
-                )
-                instance_cnt+=2
-                if not playlistitems:
-                    break
-                playlist_short_items+=(playlistitems.execute())['items']
-        
-        #각각의 영상별 description or title을 통해 상호명 추출
-        #여기부터는 각 채널의 description이 상이하므로 하드코딩으로 상호명을 추출
-        print("instance_cnt : ", instance_cnt)
-        each_extract(playlist_short_items,channel_name,input_list)
-        
-    
 def video_info_input(input_list, video_id):
     input_list[2]=f"https://www.youtube.com/watch?v={video_id}"
     video_infos=youtube.videos().list(
@@ -126,12 +105,10 @@ def restaurant_list_input(matches,video_id):
     
     restaurant_in_video_list.append(matches)
     video_id_restaurant_list.append(video_id)
-
+    
 def videos_df_input(input_list):
     global videos_df
     videos_df.loc[len(videos_df)] = input_list
-    
-
     
 def each_extract(playlist_short_items,channel_name,input_list):
     if(channel_name=='성시경 SUNG SI KYUNG'):
@@ -295,3 +272,185 @@ def each_extract(playlist_short_items,channel_name,input_list):
                 matches = matches.group(1)
                 restaurant_list_input(matches,video_id)
                 videos_df_input(video_info_input(input_list, video_id))
+
+#get,input Table
+########################################################################################################
+
+from google.cloud import bigquery
+from google.oauth2 import service_account
+import pandas as pd
+
+# 서비스 계정 인증 정보가 담긴 JSON 파일 경로
+KEY_PATH = "/mnt/c/Users/q5749/youtube_api_practice/database/firstgenerator/mz_map_servoce_account.json"
+
+# Credentials 객체 생성
+credentials = service_account.Credentials.from_service_account_file(
+    KEY_PATH, scopes=["https://www.googleapis.com/auth/cloud-platform"],
+)
+# 빅쿼리 클라이언트 객체 생성
+client = bigquery.Client(credentials = credentials, project = credentials.project_id)
+
+#BigQuery에 데이터 적재하기
+def input_table(table_name,input_df,is_replace):
+    project_name = 'summer-pattern-398307'
+    dataset_name = 'MZ_map_table'
+    destination_table = dataset_name + '.' + table_name
+    
+    if(is_replace):
+        input_df.to_gbq(destination_table,project_name,if_exists='replace',credentials=credentials)
+        print('replace ok')
+    else:
+        input_df.to_gbq(destination_table,project_name,if_exists='append',credentials=credentials)
+        print('append ok')
+        
+# BigQuery에서 테이블 가져오기
+def get_table(query):
+    df = client.query(query).to_dataframe()
+    return df
+
+#restaurants
+########################################################################################################
+import requests
+
+#kakao_map
+my_map_restapi_key = 'ef692e63b23382e5f866e76b99b38b40'
+
+#restaurants테이블 생성
+restaurants_col_list=['restaurant_name',
+                     'address',
+                     'location_x',
+                     'location_y',
+                     'place_url']
+restaurants_list=[]
+restaurants_df=pd.DataFrame(restaurants_list,columns=restaurants_col_list)
+
+#video_id_restaurant_list
+def place_to_info(place,my_RESP_API_key):
+    url = 'https://dapi.kakao.com/v2/local/search/keyword.json'
+    params = {'query': place,'page': 1}
+    headers = {"Authorization": "KakaoAK "+my_RESP_API_key}
+    try:
+        places = requests.get(url, params=params, headers=headers).json()['documents'][0]
+        
+        if(int(places['x']) ==0):
+            return;
+        
+        input_list=[place,
+                    places['address_name'],
+                    float(places['x']),
+                    float(places['y']),
+                    places['place_url']]
+        restaurant_category_df_input_list = [place,places['category_name']]
+    except:
+        print("error")
+        
+    global restaurants_df
+    restaurants_df.loc[len(restaurants_df)]=input_list
+    restaurant_category_df_input(restaurant_category_df_input_list)
+    
+def restaurant_category_df_input(input_list):
+    global  restaurant_category_df
+    #리스트형식의 여러 개의 원소가 들어가있는 열들은 sql쿼리로 차후 수정
+    restaurant_category_df.loc[len(restaurant_category_df)]=input_list
+
+def clear_restaurants_df(restaurants_col_list):
+    global restaurants_df  # 함수 내에서 전역 변수 videos_df를 수정하기 위해 global 키워드 사용
+    restaurants_df = pd.DataFrame(columns=restaurants_col_list)  # 빈 DataFrame으로 초기화
+    
+def clear_restaurant_category_df(restaurant_category_col_list):
+    global restaurant_category_df 
+    restaurant_category_df=pd.DataFrame(columns=restaurant_category_col_list)
+    
+def generate_restaurants_df(restaurant_in_video_list):
+    restaurants_col_list=['restaurant_name',
+                            'address',
+                            'location_x',
+                            'location_y',
+                            'place_url']
+    restaurant_category_col_list=['restaurant_name','category']
+    clear_restaurants_df(restaurants_col_list)
+    clear_restaurant_category_df(restaurant_category_col_list)
+    
+    place_list=list(set(restaurant_in_video_list))
+    for i,place in enumerate(place_list):
+        place_to_info(place,my_map_restapi_key)
+    
+def return_restaurants_df():
+    return restaurants_df
+
+def return_restaurant_category_df():
+    return restaurant_category_df
+
+#DAG
+########################################################################################################
+
+# 한국 시간대 설정
+kst = pytz.timezone('Asia/Seoul')
+
+def parse_youtube_after_lastest_time(**context):
+    # 현재 실행 시간을 한국 시간대로 변환
+    current_execution_time_utc = context['execution_date']
+    
+    # 이전 실행 시간 계산 및 한국 시간대로 변환
+    previous_execution_time_utc = current_execution_time_utc - timedelta(weeks=1)
+    previous_execution_time_kst = previous_execution_time_utc.astimezone(kst)
+    
+    # 추가할 videos 테이블
+    append_videos_df=generate_and_return_videos_df("PLuMuHAJh9g_Py_PSm8gmHdlcil6CQ9QCM","2023-10-27T10:59:51Z")
+    #append_videos_df=generate_and_return_videos_df("PLuMuHAJh9g_Py_PSm8gmHdlcil6CQ9QCM",str(previous_execution_time_kst))
+    print(append_videos_df)
+    
+    # 추가할 restaurants video 테이블
+    data={'link_id': None, 'video_id': video_id_restaurant_list, 'restaurant_name':restaurant_in_video_list}
+    append_restaurant_video_df=pd.DataFrame(data)
+    print(append_restaurant_video_df)
+    
+    # 추가할 restaurants 테이블
+    append_restaurants_df=return_restaurants_df()
+    append_restaurant_name_list = list(append_restaurants_df['restaurant_name'])
+    
+    # 겹치는 restauarant 데이터 제거
+    ## 빅쿼리 restaurants의 restaurant_name 추출
+    query = """
+        SELECT restaurant_name FROM `summer-pattern-398307.MZ_map_table.restaurants`;
+    """
+    
+    append_restaurants_df=return_restaurants_df()
+  
+    restaurant_names_df = client.query(query).to_dataframe()
+    ## restaurant_name 비교 후 제거
+    # 중복된 레스토랑 이름 필터링
+    duplicate_names = set(append_restaurants_df['restaurant_name']) & set(restaurant_names_df['restaurant_name'])
+
+    # 중복된 레스토랑 제거
+    append_restaurants_df = append_restaurants_df[~append_restaurants_df['restaurant_name'].isin(duplicate_names)]
+
+    print(append_restaurants_df)
+    
+    
+
+# DAG 정의
+dag = DAG(
+    dag_id="youtube_parsing_input_restaurants_videos_dag",
+    start_date=datetime(2021, 8, 26),
+    schedule_interval=None,  # 매분 실행
+    catchup=False,
+    tags=['example']
+)
+
+# LatestOnlyOperator: 최신 실행만을 위한 operator
+latest_only = LatestOnlyOperator(
+    task_id="latest_only",
+    dag=dag,
+)
+
+# PythonOperator: 실행 시간 출력 task
+parse_youtube = PythonOperator(
+    task_id="parse_youtube_after_lastest_time_task",
+    python_callable=parse_youtube_after_lastest_time,
+    provide_context=True,  # 이 옵션을 사용하여 context를 함수에 전달
+    dag=dag,
+)
+
+# Task 간의 의존성 설정
+latest_only >> parse_youtube

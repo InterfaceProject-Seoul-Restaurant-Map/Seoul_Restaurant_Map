@@ -1,12 +1,14 @@
-import os
-import re
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from oauth2client.tools import argparser
 
 import pandas as pd
-from googleapiclient.discovery import build
+import re
 
 #youtube
 #######################################
-my_youtube_1 =os.environ.get('YOUTUBE_API_KEY')
+my_youtube_1 ='AIzaSyDH8Pq7ddkmMJhA0kni5kBEe1UPBy31H70'
+my_youtube_2 ='AIzaSyAPLm-070e6WYKq2YN2WIqIzbqqrQkU3N4'
 my_youtube_api=my_youtube_1
 
 DEVELOPER_KEY = my_youtube_api
@@ -16,96 +18,63 @@ FREEBASE_SEARCH_URL = "https://www.googleapis.com/freebase/v1/search?%s"
 
 youtube=build(YOUTUBE_API_SERVICE_NAME,YOUTUBE_API_VERSION,developerKey=DEVELOPER_KEY)
 
+videos_col_list=['video_id','playlist_id','video_url','thumb_img','video_title','video_views','date']
+videos_df=pd.DataFrame(columns=videos_col_list)
+
 restaurant_in_video_list=[]
 video_id_restaurant_list=[]
 
-videos_col_list=['video_id','playlist_id','video_url','thumb_img','video_title','video_views','date']
-videos_df=pd.DataFrame([],columns=videos_col_list)
-
-def return_videos_df(channel_name,playlist_id,is_video_int,is_test):
+def generate_and_return_videos_df(playlist_id,last_execution_time):
     videos_col_list=['video_id','playlist_id','video_url','thumb_img','video_title','video_views','date']
     clear_videos_df(videos_col_list)
-    making_youtube_table(channel_name,playlist_id,is_video_int,is_test)
+    generate_videos_df(playlist_id,last_execution_time,is_test=0)
     videos_df['date'] = pd.to_datetime(videos_df['date'])
     videos_df['video_views'].astype(int)
     return videos_df
+
+def generate_videos_df(playlist_id,last_execution_time,is_test=0):
+    
+    videos_col_list=['video_id','playlist_id','video_url','thumb_img','video_title','video_views','date']
+    input_list=[None for k in range(len(videos_col_list))]
+    
+    uploads_playlist_id = playlist_id
+
+    playlistitems = youtube.playlistItems().list(
+        part='snippet', 
+        playlistId=uploads_playlist_id, 
+        maxResults=1
+        )
+
+    tmp_playlist_items=(playlistitems.execute())['items']
+    upload_time = tmp_playlist_items[0]['snippet']['publishedAt']
+    channel_name = tmp_playlist_items[0]['snippet']['channelTitle']
+
+    if(last_execution_time<upload_time):
+        playlist_items=(playlistitems.execute())['items']
+        
+    if(is_test==0 or last_execution_time<upload_time):
+        while playlistitems:
+            playlistitems = youtube.playlistItems().list_next(
+                playlistitems,
+                playlistitems.execute()
+            )
+
+            if not playlistitems:
+                break
+            
+            tmp_playlist_items=(playlistitems.execute())['items']
+            upload_time = tmp_playlist_items[0]['snippet']['publishedAt']
+
+            if(last_execution_time>=upload_time):
+                break
+            playlist_items+=(playlistitems.execute())['items']
+    
+    each_extract(playlist_items,channel_name,input_list)
 
 def clear_videos_df(videos_col_list):
     global videos_df  # 함수 내에서 전역 변수 videos_df를 수정하기 위해 global 키워드 사용
     videos_df = pd.DataFrame(columns=videos_col_list)  # 빈 DataFrame으로 초기화
 
-#하나의 플레이리스트 당 video 추출
-def making_youtube_table(channel_name,playlist_id,is_video_int,is_test):
-    videos_col_list=['video_id','playlist_id','video_url','thumb_img','video_title','video_views','date']
-            
-    input_list=[None for k in range(len(videos_col_list))] #video테이블에 넣을 빈리스트 생성
-    instance_cnt=0;
-    #재생목록이 있는 경우
-    if(is_video_int == 1):
-        input_list[1]=playlist_id
-        
-        if(is_test==1):
-            video = youtube.playlistItems().list(
-                playlistId = playlist_id,
-                part = 'snippet',
-                maxResults = 2 
-                )
-            playlist_short_items=(video.execute())['items']
-            instance_cnt+=2
-        else:
-            video = youtube.playlistItems().list(
-                playlistId = playlist_id,
-                part = 'snippet',
-                maxResults = 50 
-                )
-            playlist_short_items=(video.execute())['items']
-            instance_cnt+=50
-            while video:
-                video = youtube.playlistItems().list_next(
-                    video,
-                    video.execute()
-                )
-                if not video:
-                    break
-                playlist_short_items+=(video.execute())['items']
-        
-        print("instance_cnt : ", instance_cnt)
-        
-        #각각의 영상별 description or title을 통해 상호명 추출
-        #여기부터는 각 채널의 description이 상이하므로 하드코딩으로 상호명을 추출
-        each_extract(playlist_short_items,channel_name,input_list)
-        
-    
-    #재생목록이 없는 경우(쇼츠)
-    else: #(is_video_int == 0)
-        uploads_playlist_id = playlist_id
-        
-        input_list[1]=uploads_playlist_id
-        
-        playlistitems = youtube.playlistItems().list(
-            part='snippet', 
-            playlistId=uploads_playlist_id, 
-            maxResults=2
-            )
-        instance_cnt+=2
-        playlist_short_items=(playlistitems.execute())['items']
-        if(is_test==0):
-            while playlistitems:
-                playlistitems = youtube.playlistItems().list_next(
-                    playlistitems,
-                    playlistitems.execute()
-                )
-                instance_cnt+=2
-                if not playlistitems:
-                    break
-                playlist_short_items+=(playlistitems.execute())['items']
-        
-        #각각의 영상별 description or title을 통해 상호명 추출
-        #여기부터는 각 채널의 description이 상이하므로 하드코딩으로 상호명을 추출
-        print("instance_cnt : ", instance_cnt)
-        each_extract(playlist_short_items,channel_name,input_list)
-        
-    
 def video_info_input(input_list, video_id):
     input_list[2]=f"https://www.youtube.com/watch?v={video_id}"
     video_infos=youtube.videos().list(
@@ -126,12 +95,10 @@ def restaurant_list_input(matches,video_id):
     
     restaurant_in_video_list.append(matches)
     video_id_restaurant_list.append(video_id)
-
+    
 def videos_df_input(input_list):
     global videos_df
     videos_df.loc[len(videos_df)] = input_list
-    
-
     
 def each_extract(playlist_short_items,channel_name,input_list):
     if(channel_name=='성시경 SUNG SI KYUNG'):

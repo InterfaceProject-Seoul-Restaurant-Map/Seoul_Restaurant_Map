@@ -1,11 +1,11 @@
-import re
+import os
+
 import pandas as pd
-import numpy as np
 import requests
 
 #kakao_map
 #######################################
-my_map_restapi_key = 'ef692e63b23382e5f866e76b99b38b40'
+my_map_restapi_key = os.environ.get("KAKAO_RESTAPI_KEY")
 
 #restaurants테이블 생성
 #####################
