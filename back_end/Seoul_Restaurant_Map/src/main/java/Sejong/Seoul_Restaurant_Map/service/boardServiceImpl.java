@@ -42,8 +42,8 @@ public class boardServiceImpl {
         List<Board> notices = posts.stream().filter(o -> o.getIsNotice()).collect(Collectors.toList());
         posts.removeIf(o -> o.getIsNotice());
 
-        List<BoardPostResponseDto> normal = posts.stream().map(o -> new BoardPostResponseDto(o)).collect(Collectors.toList());
-        List<BoardPostResponseDto> notice = notices.stream().map(o -> new BoardPostResponseDto(o)).collect(Collectors.toList());
+        List<BoardPostResponseDto> normal = posts.stream().map(o -> new BoardPostResponseDto(o, userId)).collect(Collectors.toList());
+        List<BoardPostResponseDto> notice = notices.stream().map(o -> new BoardPostResponseDto(o, userId)).collect(Collectors.toList());
 
         normal.sort(BoardPostResponseDto.comparator);
         notice.sort(BoardPostResponseDto.comparator);
@@ -90,6 +90,26 @@ public class boardServiceImpl {
                 board.setUser(user);
                 user.getBoards().add(board);
                 boardRepository.save(board);
+                return 0;
+            }
+            else
+                return 2;
+        }
+        else
+            return 1;
+    }
+
+    public int deletePost(String userId, Long postId) {
+        Optional<Board> boardOptional = boardRepository.findById(postId);
+        if (boardOptional.isPresent())
+        {
+            Board board = boardOptional.get();
+            Optional<User> userOptional = userRepository.findById(userId);
+            if (userOptional.isPresent())
+            {
+                User user = userOptional.get();
+                user.getBoards().remove(board);
+                boardRepository.delete(board);
                 return 0;
             }
             else

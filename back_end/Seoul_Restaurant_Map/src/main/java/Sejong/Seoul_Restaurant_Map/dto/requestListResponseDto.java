@@ -23,6 +23,8 @@ public class requestListResponseDto {
        this.requestId = requestBoard.getRequestId();
        if (myId.equals(this.userId))
            this.isMine = true;
+       else if (myId.equals("admin"))
+           this.isMine = true;
        else
            this.isMine = false;
     }

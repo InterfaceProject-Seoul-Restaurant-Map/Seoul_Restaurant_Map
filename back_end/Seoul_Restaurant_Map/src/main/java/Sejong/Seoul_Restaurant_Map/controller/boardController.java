@@ -17,7 +17,7 @@ import java.util.List;
 public class boardController {
     private final boardServiceImpl boardService;
 
-    @PostMapping(value = "board/addPost")
+    @PostMapping(value = "/board/addPost")
     public int addPost(@RequestBody HashMap<String, String> map, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("loginUser") != null){
@@ -28,7 +28,7 @@ public class boardController {
         }
     }
 
-    @GetMapping(value = "board/searchPost")
+    @GetMapping(value = "/board/searchPost")
     public BoardResponseDto searchPost(@RequestParam String userId, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("loginUser") != null){
@@ -36,6 +36,19 @@ public class boardController {
         }
         else {
             return null;
+        }
+    }
+
+    @PostMapping(value = "/board/deletePost")
+    public int deletePost(@RequestBody HashMap<String, Object> map, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("loginUser") != null){
+            String userId = (String)map.get("userId");
+            long postId = (long)(int)map.get("postId");
+            return boardService.deletePost(userId, postId);
+        }
+        else {
+            return 3;
         }
     }
 

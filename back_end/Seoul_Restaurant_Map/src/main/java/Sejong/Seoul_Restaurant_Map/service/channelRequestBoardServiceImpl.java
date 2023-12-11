@@ -40,14 +40,35 @@ public class channelRequestBoardServiceImpl {
         List<ChannelRequestBoard> notices = posts.stream().filter(o -> o.isNotice()).collect(Collectors.toList());
         posts.removeIf(o -> o.isNotice());
 
-        List<channelRequestPostDto> notice = notices.stream().map(o -> new channelRequestPostDto(o)).collect(Collectors.toList());
-        List<channelRequestPostDto> normal = posts.stream().map(o -> new channelRequestPostDto(o)).collect(Collectors.toList());
+        List<channelRequestPostDto> notice = notices.stream().map(o -> new channelRequestPostDto(o, userId)).collect(Collectors.toList());
+        List<channelRequestPostDto> normal = posts.stream().map(o -> new channelRequestPostDto(o, userId)).collect(Collectors.toList());
 
         notice.sort(channelRequestPostDto.comparator);
         normal.sort(channelRequestPostDto.comparator);
 
         channelRequestBoardResponseDto rtn = new channelRequestBoardResponseDto(notice, normal);
         return rtn;
+    }
+
+    public int deletePost(String userId, Long postId)
+    {
+        Optional<ChannelRequestBoard> channelRequestBoardOptional = channelRequestBoardRepository.findById(postId);
+        if (channelRequestBoardOptional.isPresent())
+        {
+            ChannelRequestBoard channelRequestBoard = channelRequestBoardOptional.get();
+            Optional<User> userOptional = userRepository.findById(userId);
+            if (userOptional.isPresent())
+            {
+                User user = userOptional.get();
+                user.getChannelRequestBoards().remove(channelRequestBoard);
+                channelRequestBoardRepository.delete(channelRequestBoard);
+                return 0;
+            }
+            else
+                return 2;
+        }
+        else
+            return 1;
     }
 
     public int addAdminComment(String userId, Long postId, String adminAnswer, String answerDate) {

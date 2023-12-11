@@ -39,6 +39,19 @@ public class channelRequestBoardController {
         }
     }
 
+    @PostMapping(value = "/channelRequestBoard/deletePost")
+    public int deletePost(@RequestBody HashMap<String, Object> map, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("loginUser") != null){
+            String userId = (String)map.get("userId");
+            long postId = (long)(int)map.get("postId");
+            return channelRequestBoardService.deletePost(userId, postId);
+        }
+        else {
+            return 3;
+        }
+    }
+
     @PostMapping(value = "/channelRequestBoard/addAdminComment")
     public int addAdminComment(@RequestBody HashMap<String, Object> map, HttpServletRequest request) {
         HttpSession session = request.getSession(false);

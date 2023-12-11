@@ -13,8 +13,9 @@ public class channelRequestPostDto {
     private String answerDate;
     private Long postId;
     private String state;
+    private boolean deleteAuth;
 
-    public channelRequestPostDto(ChannelRequestBoard board) {
+    public channelRequestPostDto(ChannelRequestBoard board, String myId) {
         this.userId = board.getUser().getUser_id();
         this.title = board.getTitle();
         this.body = board.getBody();
@@ -23,6 +24,12 @@ public class channelRequestPostDto {
         this.answerDate = board.getAnswerDate();
         this.postId = board.getPostId();
         this.state = board.getState();
+        if (myId.equals(userId))
+            deleteAuth = true;
+        else if (myId.equals("admin"))
+            deleteAuth = true;
+        else
+            deleteAuth = false;
     }
 
     public static final Comparator<channelRequestPostDto> comparator = new Comparator<channelRequestPostDto>() {
@@ -31,6 +38,14 @@ public class channelRequestPostDto {
             return Long.valueOf(o2.postId - o1.postId).intValue();
         }
     };
+
+    public boolean isDeleteAuth() {
+        return deleteAuth;
+    }
+
+    public void setDeleteAuth(boolean deleteAuth) {
+        this.deleteAuth = deleteAuth;
+    }
 
     public String getState() {
         return state;

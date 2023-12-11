@@ -12,8 +12,9 @@ public class BoardPostResponseDto {
     private String adminAnswer;
     private String answerDate;
     private Long postId;
+    private boolean deleteAuth;
 
-    public BoardPostResponseDto(Board board) {
+    public BoardPostResponseDto(Board board, String myId) {
         this.userId = board.getUser().getUser_id();
         this.title = board.getTitle();
         this.body = board.getBody();
@@ -21,6 +22,12 @@ public class BoardPostResponseDto {
         this.adminAnswer = board.getAdminAnswer();
         this.answerDate = board.getAnswerDate();
         this.postId = board.getPostId();
+        if (myId.equals(userId))
+            deleteAuth = true;
+        else if (myId.equals("admin"))
+            deleteAuth = true;
+        else
+            deleteAuth = false;
     }
 
     public static final Comparator<BoardPostResponseDto> comparator = new Comparator<BoardPostResponseDto>() {
@@ -29,6 +36,14 @@ public class BoardPostResponseDto {
             return Long.valueOf(o2.postId - o1.postId).intValue();
         }
     };
+
+    public boolean isDeleteAuth() {
+        return deleteAuth;
+    }
+
+    public void setDeleteAuth(boolean deleteAuth) {
+        this.deleteAuth = deleteAuth;
+    }
 
     public String getUserId() {
         return userId;
