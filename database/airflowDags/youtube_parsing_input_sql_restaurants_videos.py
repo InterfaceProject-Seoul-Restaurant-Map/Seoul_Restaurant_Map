@@ -512,7 +512,6 @@ def parse_youtube_after_lastest_time(**context):
     input_table_sql(append_restaurant_category_df,"restaurant_category",0)
     
 
-# DAG 정의
 dag = DAG(
     dag_id="youtube_parsing_input_restaurants_videos_dag",
     start_date=datetime(2021, 8, 26),
@@ -521,19 +520,17 @@ dag = DAG(
     tags=['example']
 )
 
-# LatestOnlyOperator: 최신 실행만을 위한 operator
 latest_only = LatestOnlyOperator(
     task_id="latest_only",
     dag=dag,
 )
 
-# PythonOperator: 실행 시간 출력 task
+
 parse_youtube = PythonOperator(
     task_id="parse_youtube_after_lastest_time_task",
     python_callable=parse_youtube_after_lastest_time,
-    provide_context=True,  # 이 옵션을 사용하여 context를 함수에 전달
+    provide_context=True, 
     dag=dag,
 )
 
-# Task 간의 의존성 설정
 latest_only >> parse_youtube
