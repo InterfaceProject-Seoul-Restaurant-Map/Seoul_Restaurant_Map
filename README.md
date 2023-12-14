@@ -63,16 +63,16 @@ For building and running the application you need:
 <br>
 <a href="https://github.com/InterfaceProject-Seoul-aRestaurant-Map/Seoul_Restaurant_Map/tree/database">database</a></td>
 <br>
-- Front-end
+- **Front-end**
   1. 브라우저 호환성:
       - Google Chrome, Firefox, Safari, 또는 Microsoft Edge와 호환되는 최신 버전의 브라우저.
   2. Node.js 및 패키지 매니저:
       - Node.js: React 애플리케이션을 실행하기 위한 Node.js 환경. (권장 버전: 확인 필요)
       - 패키지 매니저: npm 또는 yarn과 같은 패키지 매니저를 통한 필요한 라이브러리 및 의존성 관리.
-- Back-end
+- **Back-end**
   - jdk 11.0.21
   - spring boot 3.1.3
-- database
+- **database**
   - python 3.9
 
 ### Installation
@@ -101,8 +101,6 @@ For building and running the application you need:
 <img src="https://img.shields.io/badge/VISUAL STUDIO CODE-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white">  <img src="https://img.shields.io/badge/GIT-F05032?style=flat-square&logo=git&logoColor=white">  <img src="https://img.shields.io/badge/GITHUB-181717?style=flat-square&logo=github&logoColor=white">  <img src="https://img.shields.io/badge/PyCharm-181717?style=flat-square&logo=pycharm&logoColor=white">
 
 ### Config
-{추가 수정 부탁}
-
 <img src="https://img.shields.io/badge/NPM-CB3837?style=flat-square&logo=npm&logoColor=white">
 
 ### Development
