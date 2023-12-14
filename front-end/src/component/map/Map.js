@@ -31,14 +31,15 @@ const BasicMap = () => {
         let y_end = neLatLng.getLat();
 
         try {
-            const response = await axios.get('/home/search', {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/home/search`, {
                 params: {
                     x_start: x_start,
                     x_end: x_end,
                     y_start: y_start,
                     y_end: y_end,
-                }
-            }, config);
+                },
+                withCredentials: true
+            });
             setMarkers(response.data);
             setTriggerEffect(false);
         } catch (error) {

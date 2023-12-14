@@ -1,6 +1,8 @@
 import { useState } from "react";
 import GeneralBoard from "./GeneralBoard";
 import ChannelBoard from "./ChannelBoard";
+import { useNavigate } from "react-router-dom";
+import { useMarkers } from "../util/MyContext";
 import { styled } from "styled-components";
 import OrangeBtn from "../common/OrangeBtn";
 import AddGeneralBoardCard from "./AddGeneralBoardCard";
@@ -18,7 +20,18 @@ const NavigationBar = ({ selectedTab, onTabChange, buttonStyle }) => {
     const userId = sessionStorage.getItem("userId");
     const handleClick = (tab) => onTabChange(tab);
     const [isModalOpen, setModalOpen] = useState(false);
-    const openModal = () => setModalOpen(true);
+    const { isLogin, setIsLogin } = useMarkers();
+    const navigate = useNavigate();
+    const openModal = () => {
+        if (!isLogin) {
+            alert("로그인 후 이용 가능합니다.");
+            setTimeout(() => {
+                navigate("/login", { replace: true });
+            }, 10);
+        }
+        else
+            setModalOpen(true);
+    };
     const closeModal = () => setModalOpen(false);
 
     return (

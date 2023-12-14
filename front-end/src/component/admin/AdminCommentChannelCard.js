@@ -70,6 +70,88 @@ const AdminCommentChannelCard = ({ onClose, postId }) => {
 
     const onChangeProcessCommentHandler = (e) => setProcessComment(e.target.value);
 
+    // const onClickAdminComment = async ({ postId }) => {
+    //     const userId = sessionStorage.getItem("userId");
+    //     const currentDate = new Date();
+    //     const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+    //     if (!processComment) {
+    //         alert("요청칸을 채워주세요.");
+    //         return;
+    //     }
+    //     let body = {
+    //         userId: userId,
+    //         postId: postId,
+    //         adminAnswer: processComment,
+    //         answerDate: formattedDate,
+    //     };
+
+    //     try {
+    //         const response = await axios.post(`${process.env.REACT_APP_API_URL}/channelRequestBoard/addAdminComment`, body, { withCredentials: true });
+    //         switch (response.data) {
+    //             case 0:
+    //                 alert("처리 성공");
+    //                 onClose();
+    //                 break;
+    //             case 1:
+    //                 alert("관리자 계정이 아닙니다.");
+    //                 break;
+    //             case 2:
+    //                 alert("관리자 계정이 없습니다.");
+    //                 break;
+    //             case 3:
+    //                 alert("postId가 없습니다.");
+    //                 break;
+    //             case 4:
+    //                 alert("세션이 만료되었습니다.");
+    //                 break;
+    //             default:
+    //                 alert("알 수 없는 상태 코드입니다:", response.data);
+    //                 break;
+    //         }
+    //     } catch (error) {
+    //         alert("Error fetching data:", error.response.data);
+    //     }
+    // };
+
+    // const handleState = async ({ postId }) => {
+    //     const userId = sessionStorage.getItem("userId");
+    //     if (!processComment) {
+    //         alert("요청칸을 채워주세요.");
+    //         return;
+    //     }
+    //     let body = {
+    //         userId: userId,
+    //         postId: postId,
+    //         state: processState,
+    //     };
+
+    //     try {
+    //         const response = await axios.post(`${process.env.REACT_APP_API_URL}/channelRequestBoard/updateStateByAdmin`, body, { withCredentials: true });
+    //         switch (response.data) {
+    //             case 0:
+    //                 alert("처리 성공");
+    //                 onClose();
+    //                 break;
+    //             case 1:
+    //                 alert("관리자 계정이 아닙니다.");
+    //                 break;
+    //             case 2:
+    //                 alert("관리자 계정이 없습니다.");
+    //                 break;
+    //             case 3:
+    //                 alert("postId가 없습니다.");
+    //                 break;
+    //             case 4:
+    //                 alert("세션이 만료되었습니다.");
+    //                 break;
+    //             default:
+    //                 alert("알 수 없는 상태 코드입니다:", response.data);
+    //                 break;
+    //         }
+    //     } catch (error) {
+    //         alert("Error fetching data:", error.response.data);
+    //     }
+    // };
     const onClickAdminComment = async ({ postId }) => {
         const userId = sessionStorage.getItem("userId");
         const currentDate = new Date();
@@ -78,75 +160,35 @@ const AdminCommentChannelCard = ({ onClose, postId }) => {
             alert("요청칸을 채워주세요.");
             return;
         }
-        let body = {
+        let body1 = {
             userId: userId,
             postId: postId,
             adminAnswer: processComment,
             answerDate: formattedDate,
         };
-
-        try {
-            const response = await axios.post("channelRequestBoard/addAdminComment", body);
-            switch (response.data) {
-                case 0:
-                    alert("처리 성공");
-                    onClose();
-                    break;
-                case 1:
-                    alert("관리자 계정이 아닙니다.");
-                    break;
-                case 2:
-                    alert("관리자 계정이 없습니다.");
-                    break;
-                case 3:
-                    alert("postId가 없습니다.");
-                    break;
-                case 4:
-                    alert("세션이 만료되었습니다.");
-                    break;
-                default:
-                    alert("알 수 없는 상태 코드입니다:", response.data);
-                    break;
-            }
-        } catch (error) {
-            alert("Error fetching data:", error.response.data);
-        }
-    };
-
-    const handleState = async ({ postId }) => {
-        const userId = sessionStorage.getItem("userId");
-        if (!processComment) {
-            alert("요청칸을 채워주세요.");
-            return;
-        }
-        let body = {
+        let body2 = {
             userId: userId,
             postId: postId,
             state: processState,
         };
 
         try {
-            const response = await axios.post("/channelRequestBoard/updateStateByAdmin", body);
-            switch (response.data) {
-                case 0:
-                    alert("처리 성공");
-                    onClose();
-                    break;
-                case 1:
-                    alert("관리자 계정이 아닙니다.");
-                    break;
-                case 2:
-                    alert("관리자 계정이 없습니다.");
-                    break;
-                case 3:
-                    alert("postId가 없습니다.");
-                    break;
-                case 4:
-                    alert("세션이 만료되었습니다.");
-                    break;
-                default:
-                    alert("알 수 없는 상태 코드입니다:", response.data);
-                    break;
+            const response1 = await axios.post(`${process.env.REACT_APP_API_URL}/channelRequestBoard/addAdminComment`, body1, { withCredentials: true });
+            const response2 = await axios.post(`${process.env.REACT_APP_API_URL}/channelRequestBoard/updateStateByAdmin`, body2, { withCredentials: true });
+
+            if (response2.data === 0 && response1.data === 0) {
+                alert("처리 성공");
+                onClose();
+            } else if (response2.data === 1 && response1.data === 1) {
+                alert("관리자 계정이 아닙니다.");
+            } else if (response2.data === 2 && response1.data === 2) {
+                alert("관리자 계정이 없습니다.");
+            } else if (response2.data === 3 && response1.data === 3) {
+                alert("postId가 없습니다.");
+            } else if (response2.data === 4 && response1.data === 4) {
+                alert("세션이 만료되었습니다.");
+            } else {
+                alert("알 수 없는 상태 코드입니다:");
             }
         } catch (error) {
             alert("Error fetching data:", error.response.data);
@@ -183,7 +225,7 @@ const AdminCommentChannelCard = ({ onClose, postId }) => {
                 <OrangeBtn text={"확인"} style={{ boxShadow: 'none', borderRadius: 0, marginBottom: "2vh" }}
                     onClick={() => {
                         onClickAdminComment({ postId: postId });
-                        handleState({ postId: postId });
+                        //handleState({ postId: postId });
                     }}
                 />
             </ModalContent>

@@ -72,7 +72,7 @@ const onClickDeleteRequest = async ({ requestId, fetchData }) => {
     let body = { userId: userId, requestId: requestId };
 
     try {
-        const response = await axios.post("/requestBoard/deleteMyRequestElement", body);
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/requestBoard/deleteMyRequestElement`, body, { withCredentials: true });
         switch (response.data) {
             case 0:
                 alert("삭제가 성공적으로 이루어졌습니다.");
@@ -171,12 +171,15 @@ const RequestMatzipBoard = () => {
     const fetchData = async () => {
         const userId = sessionStorage.getItem("userId");
         try {
-            const response = await axios.get("/requestBoard/searchRequestList", {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/requestBoard/searchRequestList`, {
                 params: {
                     userId: userId,
                 },
+                withCredentials: true,
             });
-            setTotalNum(response.data.length);
+            if (response.data.length)
+                setTotalNum(response.data.length);
+            console.log("response", response);
 
             const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
             const endIndex = startIndex + ITEMS_PER_PAGE;

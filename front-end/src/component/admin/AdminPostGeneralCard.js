@@ -76,7 +76,7 @@ const AdminPostGeneralCard = ({ onClose }) => {
             return;
         }
         try {
-            const response = await axios.post('/board/addAdminNotice', body2);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/addAdminNotice`, body2, { withCredentials: true });
             switch (response.data) {
                 case 0:
                     alert("공지사항이 등록되었습니다.");

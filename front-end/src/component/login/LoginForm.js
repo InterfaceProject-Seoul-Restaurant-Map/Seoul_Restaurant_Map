@@ -37,6 +37,10 @@ const StyleSubmitBtn = styled.button`
     }
 `;
 
+// document.cookie = "safeCookie1=foo;SameSite=Lax";
+// document.cookie = "safeCookie2=foo";
+// document.cookie = "crossCookie=bar;SameSite=None;Secure";
+
 const LoginForm = () => {
     const navigate = useNavigate();
     const [id, setId] = useState("");
@@ -44,7 +48,6 @@ const LoginForm = () => {
     const { isLogin, setIsLogin } = useMarkers();
 
     const config = {
-        withCredentials: true,
         headers: {
             'Content-Type': 'application/json', // 예시로 Content-Type 헤더를 추가했습니다.
         },
@@ -77,8 +80,9 @@ const LoginForm = () => {
         const [id, password] = event.target;
         let body = { id: id.value, password: password.value };
         await axios
-            .post("/login", body, config)
+            .post(`${process.env.REACT_APP_API_URL}/login`, body, { withCredentials: 'include' })
             .then((response) => {
+                console.log("login: ", response);
                 if (response.data === 'ID_ERROR') {
                     alert("일치하는 아이디가 없습니다.");
                 } else if (response.data === 'PASSWORD_ERROR') {

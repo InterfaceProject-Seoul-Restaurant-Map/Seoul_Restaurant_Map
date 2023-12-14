@@ -9,6 +9,7 @@ import DeleteListElementBtn from "../common/DeleteListElementBtn";
 import { useMarkers } from "../util/MyContext";
 import DotToggleImg from "../../img/DotToggle.png"
 
+
 const AddBtn = styled.div`
     font-size: 1.1rem;
     font-weight: 900;
@@ -18,7 +19,7 @@ const AddBtn = styled.div`
 `
 
 const InputContainer = styled.div`
-    display: ${props => (props.showinput ? 'flex' : 'none')}; // showInput이 true일 때만 flex로 설정
+    display: ${(props) => (props.showinput ? 'flex' : 'none')}; // showInput이 true일 때만 flex로 설정
 
     input {
         caret-color: #FF7A00;
@@ -56,6 +57,12 @@ const ToggleList = ({ list, getMyList }) => {
     const [isListDeleteOpen, setIsListDeleteOpen] = useState(false);
     const [isEleDeleteOpen, setIsEleDeleteOpen] = useState(false);
     const { setMarkers, setMapInfo } = useMarkers();
+    const config = {
+        headers: {
+            'Content-Type': 'application/json', // 예시로 Content-Type 헤더를 추가했습니다.
+        },
+        withCredentials: true,
+    };
 
     const handleToggle = () => { setIsListOpen(!isListOpen) };
     const handleListDelToggle = (e) => { setIsListDeleteOpen(!isListDeleteOpen); e.stopPropagation(); };
@@ -65,7 +72,7 @@ const ToggleList = ({ list, getMyList }) => {
         const userId = sessionStorage.getItem("userId");
         let body = { userId: userId, listName: listName };
         try {
-            const response = await axios.post("/list/deleteList", body);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/list/deleteList`, body, config);
             switch (response.data) {
                 case 0:
                     console.log("삭제가 성공적으로 이루어졌습니다.");
@@ -92,7 +99,7 @@ const ToggleList = ({ list, getMyList }) => {
         const userId = sessionStorage.getItem("userId");
         let body = { userId: userId, listName: listName, restaurantName: restaurantName };
         try {
-            const response = await axios.post("/list/deleteListElement", body);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/list/deleteListElement`, body, config);
             switch (response.data) {
                 case 0:
                     console.log("삭제가 성공적으로 이루어졌습니다.");
@@ -124,10 +131,11 @@ const ToggleList = ({ list, getMyList }) => {
             return [obj];
         }
         try {
-            const response = await axios.get("/list/returnListElement", {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/list/returnListElement`, {
                 params: {
                     restaurantName: restaurantName,
-                }
+                },
+                withCredentials: true
             });
             console.log(response.data);
             setMarkers(convertObjectToArray(response.data));
@@ -174,11 +182,19 @@ const ToggleList = ({ list, getMyList }) => {
 };
 
 const MyList = () => {
+
     const [showInput, setShowInput] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [myListData, setMyListData] = useState([]);
     const onClickAddBtn = () => setShowInput(!showInput);
     const onInputChange = e => setInputValue(e.target.value);
+
+    const config = {
+        headers: {
+            'Content-Type': 'application/json', // 예시로 Content-Type 헤더를 추가했습니다.
+        },
+        withCredentials: 'include',
+    };
 
     const onSubmitCreateList = async () => {
         const userId = sessionStorage.getItem("userId");
@@ -188,7 +204,7 @@ const MyList = () => {
         }
         let body = { userId: userId, listName: inputValue };
         try {
-            const response = await axios.post("/list/createList", body);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/list/createList`, body, config);
             const resultCode = response.data; // 서버에서 전달받은 상태 코드
             switch (resultCode) {
                 case 0:
@@ -220,10 +236,8 @@ const MyList = () => {
     const getMyList = async () => {
         const userId = sessionStorage.getItem("userId");
         try {
-            const response = await axios.get("/list/searchMyList", {
-                params: {
-                    userId: userId,
-                }
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/list/searchMyList?userId=${userId}`, {
+                withCredentials: true,
             });
             if (response.data.length === 0)
                 return;
@@ -240,7 +254,7 @@ const MyList = () => {
     return (
         <>
             <AddBtn onClick={onClickAddBtn}>새로운 리스트 추가하기</AddBtn>
-            <InputContainer showinput={showInput}>
+            <InputContainer showinput={showInput ? 1 : 0}>
                 <input type="text" value={inputValue} onChange={onInputChange} placeholder="리스트명을 입력해주세요" />
                 <button onClick={onSubmitCreateList}>추가하기</button>
             </InputContainer>

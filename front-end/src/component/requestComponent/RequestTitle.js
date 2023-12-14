@@ -2,6 +2,8 @@ import { useState } from "react";
 import OrangeBtn from "../common/OrangeBtn";
 import { styled } from "styled-components";
 import RequestMatzipCard from "./RequestMatzipCard";
+import { useMarkers } from '../util/MyContext';
+import { useNavigate } from "react-router-dom";
 
 const InputContainer = styled.div`
     input {
@@ -24,7 +26,19 @@ const RequestTitle = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const openModal = () => setModalOpen(true);
     const closeModal = () => setModalOpen(false);
-    const requestMatzip = () => openModal();
+    const { isLogin, setIsLogin } = useMarkers();
+    const navigate = useNavigate();
+
+    const requestMatzip = () => {
+        if (!isLogin) {
+            alert("로그인 후 이용 가능합니다.");
+            setTimeout(() => {
+                navigate("/login", { replace: true });
+            }, 10);
+        }
+        else
+            openModal();
+    };
 
     return (
         <div style={{ marginBottom: "5vh" }}>

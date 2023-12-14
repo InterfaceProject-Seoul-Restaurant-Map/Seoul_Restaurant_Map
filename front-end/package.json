@@ -10,6 +10,7 @@
     "gh-pages": "^6.1.0",
     "js-cookie": "^3.0.5",
     "react": "^18.2.0",
+    "react-cookie": "^6.1.1",
     "react-dom": "^18.2.0",
     "react-kakao-maps-sdk": "^1.1.24",
     "react-router-dom": "^6.18.0",
@@ -43,6 +44,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://35.216.106.118:8443",
   "homepage": "https://thswogh.github.io/Seoul_Restaurant_Map/"
 }

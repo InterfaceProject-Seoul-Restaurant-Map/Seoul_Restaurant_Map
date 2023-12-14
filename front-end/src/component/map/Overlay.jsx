@@ -16,7 +16,7 @@ const Overlay = ({ marker, handleMarkerClick }) => {
     // checkLoginStatus 함수를 호출하여 로그인 상태를 확인
     const checkLoginStatus = async () => {
         try {
-            const response = await axios.get('/checkLoginStatus');
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/checkLoginStatus`, { withCredentials: true });
             console.log("checkLoginStatus:", response);
             // 여기서 isLoggedIn 값에 따라 로그인 여부를 확인하고 isLogin 값을 변경
             setIsLogin(response.data);
@@ -50,10 +50,11 @@ const Overlay = ({ marker, handleMarkerClick }) => {
             return;
         }
         try {
-            const response = await axios.get("/home/findList", {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/home/findList`, {
                 params: {
                     userId: userId
-                }
+                },
+                withCredentials: true,
             });
             console.log(response);
             setFindListData(response.data);
@@ -66,7 +67,7 @@ const Overlay = ({ marker, handleMarkerClick }) => {
         try {
             const userId = sessionStorage.getItem("userId");
             let body = { userId: userId, listId, listId, restaurantName, restaurantName }
-            const response = await axios.post("/home/addRestaurantToList", body);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/home/addRestaurantToList`, body, { withCredentials: true });
             switch (response.data) {
                 case 0:
                     alert("리스트에 추가하였습니다.");

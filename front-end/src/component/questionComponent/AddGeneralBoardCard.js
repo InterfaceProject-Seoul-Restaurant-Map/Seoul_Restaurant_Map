@@ -84,7 +84,7 @@ const AddGeneralBoardCard = ({ onClose }) => {
             return;
         }
         try {
-            const response = await axios.post('/board/addPost', body2);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/board/addPost`, body2, { withCredentials: true });
             switch (response.data) {
                 case 0:
                     alert("요청이 등록되었습니다.");
